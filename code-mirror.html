@@ -7,43 +7,45 @@ license that can be found in the LICENSE file.
 <link rel="import" href="codemirror-import.html">
 
 <dom-module id="code-mirror">
-  <template>
-    <link rel="stylesheet" href="codemirror-4.0/lib/codemirror.css">
-    <link href="codemirror-4.0/theme/ambiance.css" rel="stylesheet">
-    <link href="codemirror-4.0/theme/ambiance-mobile.css" rel="stylesheet">
-    <link href="codemirror-4.0/theme/blackboard.css" rel="stylesheet">
-    <link href="codemirror-4.0/theme/cobalt.css" rel="stylesheet">
-    <link href="codemirror-4.0/theme/eclipse.css" rel="stylesheet">
-    <link href="codemirror-4.0/theme/elegant.css" rel="stylesheet">
-    <link href="codemirror-4.0/theme/erlang-dark.css" rel="stylesheet">
-    <link href="codemirror-4.0/theme/lesser-dark.css" rel="stylesheet">
-    <link href="codemirror-4.0/theme/midnight.css" rel="stylesheet">
-    <link href="codemirror-4.0/theme/monokai.css" rel="stylesheet">
-    <link href="codemirror-4.0/theme/neat.css" rel="stylesheet">
-    <link href="codemirror-4.0/theme/night.css" rel="stylesheet">
-    <link href="codemirror-4.0/theme/rubyblue.css" rel="stylesheet">
-    <link href="codemirror-4.0/theme/solarized.css" rel="stylesheet">
-    <link href="codemirror-4.0/theme/twilight.css" rel="stylesheet">
-    <link href="codemirror-4.0/theme/vibrant-ink.css" rel="stylesheet">
-    <link href="codemirror-4.0/theme/xq-dark.css" rel="stylesheet">
-    <link href="codemirror-4.0/theme/xq-light.css" rel="stylesheet">
-    <link href="codemirror-4.0/addon/fold/foldgutter.css" rel="stylesheet">
+  <link rel="stylesheet" href="codemirror-4.0/lib/codemirror.css">
+  <link href="codemirror-4.0/theme/ambiance.css" rel="stylesheet">
+  <link href="codemirror-4.0/theme/ambiance-mobile.css" rel="stylesheet">
+  <link href="codemirror-4.0/theme/blackboard.css" rel="stylesheet">
+  <link href="codemirror-4.0/theme/cobalt.css" rel="stylesheet">
+  <link href="codemirror-4.0/theme/eclipse.css" rel="stylesheet">
+  <link href="codemirror-4.0/theme/elegant.css" rel="stylesheet">
+  <link href="codemirror-4.0/theme/erlang-dark.css" rel="stylesheet">
+  <link href="codemirror-4.0/theme/lesser-dark.css" rel="stylesheet">
+  <link href="codemirror-4.0/theme/midnight.css" rel="stylesheet">
+  <link href="codemirror-4.0/theme/monokai.css" rel="stylesheet">
+  <link href="codemirror-4.0/theme/neat.css" rel="stylesheet">
+  <link href="codemirror-4.0/theme/night.css" rel="stylesheet">
+  <link href="codemirror-4.0/theme/rubyblue.css" rel="stylesheet">
+  <link href="codemirror-4.0/theme/solarized.css" rel="stylesheet">
+  <link href="codemirror-4.0/theme/twilight.css" rel="stylesheet">
+  <link href="codemirror-4.0/theme/vibrant-ink.css" rel="stylesheet">
+  <link href="codemirror-4.0/theme/xq-dark.css" rel="stylesheet">
+  <link href="codemirror-4.0/theme/xq-light.css" rel="stylesheet">
+  <link href="codemirror-4.0/addon/fold/foldgutter.css" rel="stylesheet">
 
-    <style>
-      :host {
-        display: block;
-        position: relative;
-      }
-      
-      .CodeMirror {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-      }
-    </style>
-    <div id="codeMirrorDiv">
+  <style>
+    :host {
+      display: block;
+      position: relative;
+    }
+    
+    .CodeMirror {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+  <template>
+    <div id="codeMirrorDiv"></div>
+    <div style="display:none">
+      <content id="content"></content>
     </div>
   </template>
 </dom-module>
@@ -80,12 +82,15 @@ license that can be found in the LICENSE file.
       },
     },
     _isReady: false,
-    ready: function () {
+    attached: function () {
+      var distributedNode = Polymer.dom(this.$.content).getDistributedNodes()[0];
+      var dnTextContent = distributedNode ? distributedNode.textContent : '';
+
       if (!this.value) {
-        this.value = this.textContent;
+        this.value = dnTextContent;
       }
-      this.mirror = CodeMirror(this.$.codeMirrorDiv, {
-        value: this.value || this.textContent,
+      this.mirror = CodeMirror(Polymer.dom(this.$.codeMirrorDiv), {
+        value: this.value || dnTextContent,
         mode: this.mode,
         theme: this.theme,
         tabSize: this.tabSize,
