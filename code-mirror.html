@@ -6,7 +6,7 @@ license that can be found in the LICENSE file.
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="codemirror-import.html">
 
-<polymer-element name="code-mirror" attributes="value mode theme tabSize lineNumbers">
+<dom-module id="code-mirror">
   <template>
     <link rel="stylesheet" href="codemirror-4.0/lib/codemirror.css">
     <link href="codemirror-4.0/theme/ambiance.css" rel="stylesheet">
@@ -34,6 +34,7 @@ license that can be found in the LICENSE file.
         display: block;
         position: relative;
       }
+      
       .CodeMirror {
         position: absolute;
         top: 0;
@@ -42,49 +43,92 @@ license that can be found in the LICENSE file.
         width: 100%;
       }
     </style>
+    <div id="codeMirrorDiv">
+    </div>
   </template>
-  <script>
-    Polymer('code-mirror', {
-      value: '',
-      mode: 'htmlmixed',
-      theme: 'xq-light',
-      tabSize: 2,
-      lineNumbers: true,
-      ready: function() {
-        if (!this.value) {
-          this.value = this.textContent;
-        }
-        this.mirror = CodeMirror(this.shadowRoot, {
-          value: this.value || this.textContent,
-          mode: this.mode,
-          theme: this.theme,
-          tabSize: this.tabSize,
-          lineNumbers: this.lineNumbers,
-          foldGutter: true,
-          gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
-        });
+</dom-module>
+<script>
+  Polymer({
+    is: 'code-mirror',
+    //      attributes="value mode theme tabSize lineNumbers",
+    properties: {
+      value: {
+        type: String,
+        value: '',
+        notify: true,
+        observer: 'valueChanged'
       },
-      refresh: function() {
+      mode: {
+        type: String,
+        value: 'htmlmixed',
+        observer: 'modeChanged'
+      },
+      theme: {
+        type: String,
+        value: 'xq-light',
+        observer: 'themeChanged'
+      },
+      tabSize: {
+        type: Number,
+        value: 2,
+        observer: 'tabSizeChanged'
+      },
+      noLineNumbers: {
+        type: Boolean,
+        value: false,
+        observer: 'lineNumbersChanged'
+      },
+    },
+    _isReady: false,
+    ready: function () {
+      if (!this.value) {
+        this.value = this.textContent;
+      }
+      this.mirror = CodeMirror(this.$.codeMirrorDiv, {
+        value: this.value || this.textContent,
+        mode: this.mode,
+        theme: this.theme,
+        tabSize: this.tabSize,
+        lineNumbers: !this.noLineNumbers,
+        foldGutter: true,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+      });
+      this._isReady = true;
+    },
+    refresh: function () {
+      if (this._isReady) {
         this.mirror.refresh();
-      },
-      valueChanged: function() {
+      }
+    },
+    valueChanged: function () {
+      if (this._isReady) {
         this.mirror.setValue(this.value);
-      },
-      modeChanged: function() {
+      }
+    },
+    modeChanged: function () {
+      if (this._isReady) {
         this.mirror.setOption('mode', this.mode);
-      },
-      themeChanged: function() {
+      }
+    },
+    themeChanged: function () {
+      if (this._isReady) {
         this.mirror.setOption('theme', this.theme);
-      },
-      tabSizeChanged: function() {
+      }
+    },
+    tabSizeChanged: function () {
+      if (this._isReady) {
         this.mirror.setOption('tabSize', this.tabSize);
-      },
-      lineNumbersChanged: function() {
-        this.mirror.setOption('lineNumbers', this.lineNumbers);
-      },
-      focus: function() {
+      }
+    },
+    lineNumbersChanged: function () {
+      if (this._isReady) {
+        this.mirror.setOption('lineNumbers', !this.noLineNumbers);
+      }
+    },
+    focus: function () {
+      if (this._isReady) {
         this.mirror.focus();
       }
-    });
-  </script>
-</polymer-element>
+    }
+  });
+</script>
