@@ -33,7 +33,6 @@ license that can be found in the LICENSE file.
       display: block;
       position: relative;
     }
-    
     .CodeMirror {
       position: absolute;
       top: 0;
@@ -42,12 +41,7 @@ license that can be found in the LICENSE file.
       width: 100%;
     }
   </style>
-  <template>
-    <div id="codeMirrorDiv"></div>
-    <div style="display:none">
-      <content id="content"></content>
-    </div>
-  </template>
+  <template></template>
 </dom-module>
 <script>
   Polymer({
@@ -83,14 +77,17 @@ license that can be found in the LICENSE file.
     },
     _isReady: false,
     attached: function () {
-      var distributedNode = Polymer.dom(this.$.content).getDistributedNodes()[0];
-      var dnTextContent = distributedNode ? distributedNode.textContent : '';
-
       if (!this.value) {
-        this.value = dnTextContent;
+        // copy content from innerHtml/childNodes if no value was provided
+        var tc = "";
+        var c = Polymer.dom(this).childNodes;
+        for (var i = 0; i < c.length; i++) {
+          tc += c[i].textContent;
+        }
+        this.value = tc;
       }
-      this.mirror = CodeMirror(Polymer.dom(this.$.codeMirrorDiv), {
-        value: this.value || dnTextContent,
+      this.mirror = CodeMirror(Polymer.dom(this.root), {
+        value: this.value,
         mode: this.mode,
         theme: this.theme,
         tabSize: this.tabSize,
