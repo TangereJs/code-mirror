@@ -33,6 +33,7 @@ license that can be found in the LICENSE file.
       display: block;
       position: relative;
     }
+    
     .CodeMirror {
       position: absolute;
       top: 0;
@@ -76,6 +77,7 @@ license that can be found in the LICENSE file.
       },
     },
     _isReady: false,
+    _isMirrorChange: false,
     attached: function () {
       if (!this.value) {
         // copy content from innerHtml/childNodes if no value was provided
@@ -95,6 +97,14 @@ license that can be found in the LICENSE file.
         foldGutter: true,
         gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
       });
+
+      var self = this;
+      this.mirror.on('change', function (codeMirror, changeObj) {
+        self._isMirrorChange = true;
+        self.value = codeMirror.getValue();
+        self._isMirrorChange = false;
+      });
+
       this._isReady = true;
     },
     refresh: function () {
@@ -104,7 +114,9 @@ license that can be found in the LICENSE file.
     },
     valueChanged: function () {
       if (this._isReady) {
-        this.mirror.setValue(this.value);
+        if (!this._isMirrorChange) {
+          this.mirror.setValue(this.value);
+        }
       }
     },
     modeChanged: function () {
