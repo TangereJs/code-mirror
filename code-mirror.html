@@ -32,10 +32,13 @@ license that can be found in the LICENSE file.
     :host {
       display: block;
       position: relative;
+      height: 100%;
+      min-height: 100px;
+      width: 100%;
     }
     
     .CodeMirror {
-      position: absolute;
+      position: relative;
       top: 0;
       left: 0;
       height: 100%;
@@ -75,9 +78,13 @@ license that can be found in the LICENSE file.
         value: false,
         observer: 'lineNumbersChanged'
       },
+      name: {
+        type: String,
+        value: ''
+      }
     },
     _isReady: false,
-    _isMirrorChange: false,
+    _mirrorInstance: {},
     attached: function () {
       if (!this.value) {
         // copy content from innerHtml/childNodes if no value was provided
@@ -88,7 +95,7 @@ license that can be found in the LICENSE file.
         }
         this.value = tc;
       }
-      this.mirror = CodeMirror(Polymer.dom(this.root), {
+      this._mirrorInstance = CodeMirror(Polymer.dom(this.root), {
         value: this.value,
         mode: this.mode,
         theme: this.theme,
@@ -99,49 +106,48 @@ license that can be found in the LICENSE file.
       });
 
       var self = this;
-      this.mirror.on('change', function (codeMirror, changeObj) {
-        self._isMirrorChange = true;
+      this._mirrorInstance.on('change', function (codeMirror, changeObj) {
         self.value = codeMirror.getValue();
-        self._isMirrorChange = false;
       });
 
       this._isReady = true;
     },
     refresh: function () {
       if (this._isReady) {
-        this.mirror.refresh();
+        this._mirrorInstance.refresh();
       }
     },
     valueChanged: function () {
+      var cursor;
       if (this._isReady) {
-        if (!this._isMirrorChange) {
-          this.mirror.setValue(this.value);
-        }
+        cursor = this._mirrorInstance.getCursor();
+        this._mirrorInstance.setValue(this.value);
+        this._mirrorInstance.setCursor(cursor);
       }
     },
     modeChanged: function () {
       if (this._isReady) {
-        this.mirror.setOption('mode', this.mode);
+        this._mirrorInstance.setOption('mode', this.mode);
       }
     },
     themeChanged: function () {
       if (this._isReady) {
-        this.mirror.setOption('theme', this.theme);
+        this._mirrorInstance.setOption('theme', this.theme);
       }
     },
     tabSizeChanged: function () {
       if (this._isReady) {
-        this.mirror.setOption('tabSize', this.tabSize);
+        this._mirrorInstance.setOption('tabSize', this.tabSize);
       }
     },
     lineNumbersChanged: function () {
       if (this._isReady) {
-        this.mirror.setOption('lineNumbers', !this.noLineNumbers);
+        this._mirrorInstance.setOption('lineNumbers', !this.noLineNumbers);
       }
     },
     focus: function () {
       if (this._isReady) {
-        this.mirror.focus();
+        this._mirrorInstance.focus();
       }
     }
   });
