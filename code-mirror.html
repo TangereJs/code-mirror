@@ -81,6 +81,11 @@ license that can be found in the LICENSE file.
       name: {
         type: String,
         value: ''
+      },
+      disabled: {
+        type: Boolean,
+        value: false,
+        observer: 'disabledChanged'
       }
     },
     _isReady: false,
@@ -151,6 +156,11 @@ license that can be found in the LICENSE file.
     focus: function () {
       if (this._isReady) {
         this._mirrorInstance.focus();
+      }
+    },
+    disabledChanged: function () {
+      if (this._isReady) {
+        this._mirrorInstance.setOption('readOnly', this.disabled);
       }
     }
   });
