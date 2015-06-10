@@ -119,6 +119,25 @@ license that can be found in the LICENSE file.
 
       this._isReady = true;
       this.valueChanged();
+
+      // *ij*
+      // What is this here, you ask? Exactly! WTF is this?
+      // This is a hack. A major one, at that.
+      // 1) I observed that initially codeMirror does not display itself correctly when inside shadyDOM
+      // 2) I also observed that when you click the codeMirror area component displays itself correctly
+      // Via debugging I have found out that when you click the component as described in 2)
+      // CodeMirror-scroll area captures and responds to a mousedown event
+      // not only that, but which mouse button was clicked is also important
+      // So, a solution is to create a mouse event, initialize it (set event's button property)
+      // and dispatch it on the codemirror scroll area
+      // using timeout is also important; I do not understand why exactly but its needed
+      var codeMirrorScroll = Polymer.dom(this.root).querySelector('.CodeMirror-scroll');
+      var clickEvent = document.createEvent('MouseEvent');
+      clickEvent.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 80, 20, false, false, false, false, 0, null);
+      setTimeout(function () {
+        codeMirrorScroll.dispatchEvent(clickEvent);
+      }, 100);
+
     },
     refresh: function () {
       if (this._isReady) {
