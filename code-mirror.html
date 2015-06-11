@@ -133,7 +133,7 @@ license that can be found in the LICENSE file.
       // using timeout is also important; I do not understand why exactly but its needed
       var codeMirrorScroll = Polymer.dom(this.root).querySelector('.CodeMirror-scroll');
       var clickEvent = document.createEvent('MouseEvent');
-      clickEvent.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 80, 20, false, false, false, false, 0, null);
+      clickEvent.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 12, 1, false, false, false, false, 0, null);
       setTimeout(function () {
         codeMirrorScroll.dispatchEvent(clickEvent);
       }, 100);
