@@ -119,7 +119,8 @@ license that can be found in the LICENSE file.
 
       this._isReady = true;
       this.valueChanged();
-
+    },
+    attached: function () {
       // *ij*
       // What is this here, you ask? Exactly! WTF is this?
       // This is a hack. A major one, at that.
@@ -131,13 +132,14 @@ license that can be found in the LICENSE file.
       // So, a solution is to create a mouse event, initialize it (set event's button property)
       // and dispatch it on the codemirror scroll area
       // using timeout is also important; I do not understand why exactly but its needed
-      var codeMirrorScroll = Polymer.dom(this.root).querySelector('.CodeMirror-scroll');
-      var clickEvent = document.createEvent('MouseEvent');
-      clickEvent.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 12, 1, false, false, false, false, 0, null);
+      var self = this;
       setTimeout(function () {
+        var gbcr = self._mirrorInstance.display.gutters.getBoundingClientRect();
+        var codeMirrorScroll = Polymer.dom(self.root).querySelector('.CodeMirror-scroll');
+        var clickEvent = document.createEvent('MouseEvent');
+        clickEvent.initMouseEvent("mousedown", true, true, window, 0, 0, 0, gbcr.right+2, 2, false, false, false, false, 0, null);
         codeMirrorScroll.dispatchEvent(clickEvent);
       }, 100);
-
     },
     refresh: function () {
       if (this._isReady) {
