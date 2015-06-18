@@ -28,24 +28,8 @@ license that can be found in the LICENSE file.
   <link href="codemirror-4.0/theme/xq-light.css" rel="stylesheet">
   <link href="codemirror-4.0/addon/fold/foldgutter.css" rel="stylesheet">
 
-  <style>
-    :host {
-      display: block;
-      position: relative;
-      height: 100%;
-      min-height: 100px;
-      width: 100%;
-    }
-    
-    .CodeMirror {
-      position: relative;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
-    }
-  </style>
-  <template></template>
+  <template>
+  </template>
 </dom-module>
 <script>
   Polymer({
@@ -134,11 +118,12 @@ license that can be found in the LICENSE file.
       // using timeout is also important; I do not understand why exactly but its needed
       var self = this;
       setTimeout(function () {
-        var gbcr = self._mirrorInstance.display.gutters.getBoundingClientRect();
-        var codeMirrorScroll = Polymer.dom(self.root).querySelector('.CodeMirror-scroll');
-        var clickEvent = document.createEvent('MouseEvent');
-        clickEvent.initMouseEvent("mousedown", true, true, window, 0, 0, 0, gbcr.right+2, 2, false, false, false, false, 0, null);
-        codeMirrorScroll.dispatchEvent(clickEvent);
+        //        var gbcr = self._mirrorInstance.display.gutters.getBoundingClientRect();
+        //        var codeMirrorScroll = Polymer.dom(self.root).querySelector('.CodeMirror-scroll');
+        //        var clickEvent = document.createEvent('MouseEvent');
+        //        clickEvent.initMouseEvent("mousedown", true, true, window, 0, 0, 0, gbcr.right+2, 2, false, false, false, false, 0, null);
+        //        codeMirrorScroll.dispatchEvent(clickEvent);
+        self._mirrorInstance.refresh();
       }, 100);
     },
     refresh: function () {
