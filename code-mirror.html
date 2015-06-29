@@ -7,27 +7,37 @@ license that can be found in the LICENSE file.
 <link rel="import" href="codemirror-import.html">
 
 <dom-module id="code-mirror">
-  <link href="codemirror-4.0/lib/codemirror.css" rel="stylesheet">
-  <link href="codemirror-4.0/theme/ambiance.css" rel="stylesheet">
-  <link href="codemirror-4.0/theme/ambiance-mobile.css" rel="stylesheet">
-  <link href="codemirror-4.0/theme/blackboard.css" rel="stylesheet">
-  <link href="codemirror-4.0/theme/cobalt.css" rel="stylesheet">
-  <link href="codemirror-4.0/theme/eclipse.css" rel="stylesheet">
-  <link href="codemirror-4.0/theme/elegant.css" rel="stylesheet">
-  <link href="codemirror-4.0/theme/erlang-dark.css" rel="stylesheet">
-  <link href="codemirror-4.0/theme/lesser-dark.css" rel="stylesheet">
-  <link href="codemirror-4.0/theme/midnight.css" rel="stylesheet">
-  <link href="codemirror-4.0/theme/monokai.css" rel="stylesheet">
-  <link href="codemirror-4.0/theme/neat.css" rel="stylesheet">
-  <link href="codemirror-4.0/theme/night.css" rel="stylesheet">
-  <link href="codemirror-4.0/theme/rubyblue.css" rel="stylesheet">
-  <link href="codemirror-4.0/theme/solarized.css" rel="stylesheet">
-  <link href="codemirror-4.0/theme/twilight.css" rel="stylesheet">
-  <link href="codemirror-4.0/theme/vibrant-ink.css" rel="stylesheet">
-  <link href="codemirror-4.0/theme/xq-dark.css" rel="stylesheet">
-  <link href="codemirror-4.0/theme/xq-light.css" rel="stylesheet">
-  <link href="codemirror-4.0/addon/fold/foldgutter.css" rel="stylesheet">
-
+  <link href="codemirror-5.4.0/lib/codemirror.css" rel="stylesheet">
+  <link href="codemirror-5.4.0/theme/ambiance.css" rel="stylesheet">
+  <link href="codemirror-5.4.0/theme/ambiance-mobile.css" rel="stylesheet">
+  <link href="codemirror-5.4.0/theme/blackboard.css" rel="stylesheet">
+  <link href="codemirror-5.4.0/theme/cobalt.css" rel="stylesheet">
+  <link href="codemirror-5.4.0/theme/eclipse.css" rel="stylesheet">
+  <link href="codemirror-5.4.0/theme/elegant.css" rel="stylesheet">
+  <link href="codemirror-5.4.0/theme/erlang-dark.css" rel="stylesheet">
+  <link href="codemirror-5.4.0/theme/lesser-dark.css" rel="stylesheet">
+  <link href="codemirror-5.4.0/theme/midnight.css" rel="stylesheet">
+  <link href="codemirror-5.4.0/theme/monokai.css" rel="stylesheet">
+  <link href="codemirror-5.4.0/theme/neat.css" rel="stylesheet">
+  <link href="codemirror-5.4.0/theme/night.css" rel="stylesheet">
+  <link href="codemirror-5.4.0/theme/rubyblue.css" rel="stylesheet">
+  <link href="codemirror-5.4.0/theme/solarized.css" rel="stylesheet">
+  <link href="codemirror-5.4.0/theme/twilight.css" rel="stylesheet">
+  <link href="codemirror-5.4.0/theme/vibrant-ink.css" rel="stylesheet">
+  <link href="codemirror-5.4.0/theme/xq-dark.css" rel="stylesheet">
+  <link href="codemirror-5.4.0/theme/xq-light.css" rel="stylesheet">
+  <link href="codemirror-5.4.0/addon/fold/foldgutter.css" rel="stylesheet">
+  <style>
+    .CodeMirror {
+      border: 1px solid #bbb;
+      height: 100%;
+    }
+    
+    .CodeMirror-scroll {
+      min-height: 300px;
+      height: 100%;
+    }
+  </style>
   <template>
   </template>
 </dom-module>
@@ -93,7 +103,8 @@ license that can be found in the LICENSE file.
         tabSize: this.tabSize,
         lineNumbers: !this.noLineNumbers,
         foldGutter: true,
-        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+//        viewportMargin: Infinity
       });
 
       var self = this;

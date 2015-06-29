@@ -1,0 +1,68 @@
+<!doctype html>
+<!--
+Copyright 2013 The Polymer Authors. All rights reserved.
+Use of this source code is governed by a BSD-style
+license that can be found in the LICENSE file.
+-->
+<html>
+
+<head>
+  <title></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="codemirror-import.html">
+  <link href="codemirror-5.4.0/lib/codemirror.css" rel="stylesheet">
+  <link href="codemirror-5.4.0/theme/xq-light.css" rel="stylesheet">
+</head>
+<style>
+  .CodeMirror {
+    border: 1px solid #bbb;
+    height: 100%;
+  }
+  
+  .CodeMirror-scroll {
+    min-height: 300px;
+    height: 100%;
+  }
+  
+  body {    
+    height: 100%;
+  }
+  
+  #codeMirrorHost {
+    width: 100%;
+    height: 50%;
+  }
+</style>
+
+<body>
+  <div>
+    <h3>Code mirror demo #2</h3>
+    <p>In this demo codemirror is created in plain html (no polymer or web components). codemirror is initialized using the library directly in a script tag</p>
+    <p>CodeMirror area uses ideas from <a href="http://codemirror.net/demo/resize.html">codemirror resize</a> plugin</p>
+    <p>CodeMirror also has minimum height which is set via css as described <a href="https://github.com/codemirror/CodeMirror/issues/2835">here</a></p>
+  </div>
+  <div id="codeMirrorHost"></div>
+</body>
+<script>
+  document.addEventListener('WebComponentsReady', function () {
+    var codeMirrorHost = document.getElementById('codeMirrorHost');
+    var cmInstance = CodeMirror(codeMirrorHost, {
+      value: 'This is sparta!',
+      mode: 'htmlmixed',
+      theme: 'xq-light',
+      minHeight: '300px',
+      tabSize: '4',
+      lineNumbers: true,
+      foldGutter: true,
+      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+//      viewportMargin: Infinity
+    });
+
+    setTimeout(function () {
+      cmInstance.refresh();
+    }, 100);
+  });
+</script>
+
+</html>

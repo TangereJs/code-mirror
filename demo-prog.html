@@ -1,0 +1,62 @@
+<!doctype html>
+<!--
+Copyright 2013 The Polymer Authors. All rights reserved.
+Use of this source code is governed by a BSD-style
+license that can be found in the LICENSE file.
+-->
+<html>
+
+<head>
+  <title></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script src="../webcomponentsjs/webcomponents.js"></script>
+  <link rel="import" href="code-mirror.html">
+  <style>
+    body {
+      margin: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+    }
+    
+    .h40w100 {
+      height: 50%;
+      width: 100%;
+    }
+    
+    .h100w100 {
+      height: 90%;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="h40w100">
+    <h3>This is frist component</h3>
+    <div class="h100w100">
+      <code-mirror id="codeMirror1" name="comp1">
+    </div>
+    </code-mirror>
+  </div>
+  <div class="h40w100">
+    <h3>This is second component</h3>
+    <div class="h100w100">
+      <code-mirror id="codeMirror2" name="comp2">
+    </div>
+    </code-mirror>
+  </div>
+  <script>
+    document.addEventListener('WebComponentsReady', function () {
+      var codeMirror1 = document.getElementById('codeMirror1');
+      codeMirror1.value = "This is first component!";
+
+      var codeMirror2 = document.getElementById('codeMirror2');
+      codeMirror2.value = "This is second component!";
+    });
+  </script>
+</body>
+
+</html>
