@@ -6935,8 +6935,12 @@
     var widget = !ignoreWidget && marker.widgetNode;
     if (widget) builder.map.push(builder.pos, builder.pos + size, widget);
     if (!ignoreWidget && builder.cm.display.input.needsContentAttribute) {
-      if (!widget)
-        widget = builder.content.appendChild(document.createElement("span"));
+      if (!widget) {
+        var spanElem = document.createElement("span");
+        spanElem.setAttribute('style-scope', 'code-mirror');
+        widget = builder.content.appendChild();
+      }
+
       widget.setAttribute("cm-marker", marker.id);
     }
     if (widget) {
@@ -8224,6 +8228,7 @@
 
   function elt(tag, content, className, style) {
     var e = document.createElement(tag);
+    e.setAttribute('style-scope', 'code-mirror');
     if (className) e.className = className;
     if (style) e.style.cssText = style;
     if (typeof content == "string") e.appendChild(document.createTextNode(content));
