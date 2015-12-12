@@ -32,9 +32,12 @@ license that can be found in the LICENSE file.
       border: 1px solid #bbb;
     }
 
+    .CodeMirror {
+      height: auto;
+    }
+
     .CodeMirror-scroll {
-      min-height: 300px;
-      height: 100%;
+      max-height:300px;
     }
   </style>
   <template>
@@ -79,6 +82,11 @@ license that can be found in the LICENSE file.
         type: Boolean,
         value: false,
         observer: 'disabledChanged'
+      },
+      maxLines: {
+        type: Number,
+        value: 14,
+        observer: 'maxLinesChanged'
       }
     },
     _isReady: false,
@@ -128,12 +136,8 @@ license that can be found in the LICENSE file.
       // using timeout is also important; I do not understand why exactly but its needed
       var self = this;
       setTimeout(function () {
-        //        var gbcr = self._mirrorInstance.display.gutters.getBoundingClientRect();
-        //        var codeMirrorScroll = Polymer.dom(self.root).querySelector('.CodeMirror-scroll');
-        //        var clickEvent = document.createEvent('MouseEvent');
-        //        clickEvent.initMouseEvent("mousedown", true, true, window, 0, 0, 0, gbcr.right+2, 2, false, false, false, false, 0, null);
-        //        codeMirrorScroll.dispatchEvent(clickEvent);
         self._mirrorInstance.refresh();
+        self.maxLinesChanged(self.maxLines, self.maxLines);
       }, 100);
     },
     refresh: function () {
@@ -167,6 +171,17 @@ license that can be found in the LICENSE file.
     lineNumbersChanged: function () {
       if (this._isReady) {
         this._mirrorInstance.setOption('lineNumbers', !this.noLineNumbers);
+      }
+    },
+    maxLinesChanged: function (newValue, oldValue) {
+      if (this._isReady) {
+        var textHeight = this._mirrorInstance.defaultTextHeight();
+        var codeMirror = this.getElementsByClassName('CodeMirror-scroll')[0];
+        var numeric = parseInt(newValue);
+
+        var newMaxHeight = textHeight * numeric;
+        codeMirror.style['max-height'] = newMaxHeight + "px";
+        this._mirrorInstance.refresh();
       }
     },
     focus: function () {
