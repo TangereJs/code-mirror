@@ -180,7 +180,13 @@ license that can be found in the LICENSE file.
         var numeric = parseInt(newValue);
 
         var newMaxHeight = textHeight * numeric;
-        codeMirror.style['max-height'] = newMaxHeight + "px";
+        if (newMaxHeight > 0) {
+          codeMirror.style['height'] = '';
+          codeMirror.style['max-height'] = newMaxHeight + "px";
+        } else {
+          codeMirror.style['max-height'] = 'none';
+          codeMirror.style['height'] = 'auto';
+        }
         this._mirrorInstance.refresh();
       }
     },
