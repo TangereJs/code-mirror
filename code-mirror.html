@@ -115,7 +115,7 @@ license that can be found in the LICENSE file.
       });
 
       var self = this;
-      this._mirrorInstance.on('change', function (codeMirror, changeObj) {
+      this._mirrorInstance.on('blur', function (codeMirror, changeObj) {
         self.value = codeMirror.getValue();
       });
 
