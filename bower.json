@@ -1,6 +1,7 @@
 {
   "name": "code-mirror",
   "private": true,
+  "version": "5.4.0.0",
   "dependencies": {
     "polymer": "Polymer/polymer#master"
   }
