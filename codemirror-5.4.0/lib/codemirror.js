@@ -6937,7 +6937,6 @@
     if (!ignoreWidget && builder.cm.display.input.needsContentAttribute) {
       if (!widget) {
         var spanElem = document.createElement("span");
-        spanElem.setAttribute('style-scope', 'code-mirror');
         widget = builder.content.appendChild();
       }
 
@@ -8228,7 +8227,6 @@
 
   function elt(tag, content, className, style) {
     var e = document.createElement(tag);
-    e.setAttribute('style-scope', 'code-mirror');
     if (className) e.className = className;
     if (style) e.style.cssText = style;
     if (typeof content == "string") e.appendChild(document.createTextNode(content));
