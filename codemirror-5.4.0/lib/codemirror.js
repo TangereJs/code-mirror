@@ -8228,6 +8228,12 @@
   function elt(tag, content, className, style) {
     var e = document.createElement(tag);
     if (className) e.className = className;
+    // *ij* 02-04-2016 (dd-mm-yyyy)
+    // `Why is this here?`
+    // This is here to provide for correct css selector calculation when using polymer 1.0 styling with <style include>
+    Polymer.dom(e).classList.add('style-scope');
+    Polymer.dom(e).classList.add('code-mirror');
+    // end of `why is this here?`
     if (style) e.style.cssText = style;
     if (typeof content == "string") e.appendChild(document.createTextNode(content));
     else if (content) for (var i = 0; i < content.length; ++i) e.appendChild(content[i]);

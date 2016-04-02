@@ -6,42 +6,61 @@ license that can be found in the LICENSE file.
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="codemirror-import.html">
 <link rel="import" href="styles/codemirror-styles.html">
+<link rel="import" href="styles/addon-foldgutter.html">
+<link rel="import" href="styles/theme-ambiance.html">
+<link rel="import" href="styles/theme-ambiance-mobile.html">
+<link rel="import" href="styles/theme-blackboard.html">
+<link rel="import" href="styles/theme-cobalt.html">
+<link rel="import" href="styles/theme-eclipse.html">
+<link rel="import" href="styles/theme-elegant.html">
+<link rel="import" href="styles/theme-erlang-dark.html">
+<link rel="import" href="styles/theme-lesser-dark.html">
+<link rel="import" href="styles/theme-midnight.html">
+<link rel="import" href="styles/theme-monokai.html">
+<link rel="import" href="styles/theme-neat.html">
+<link rel="import" href="styles/theme-night.html">
+<link rel="import" href="styles/theme-rubyblue.html">
+<link rel="import" href="styles/theme-solarized.html">
+<link rel="import" href="styles/theme-twilight.html">
+<link rel="import" href="styles/theme-vibrant-ink.html">
+<link rel="import" href="styles/theme-xq-light.html">
+<link rel="import" href="styles/theme-xq-dark.html">
 
 <dom-module id="code-mirror">
-  <style include="codemirror-styles"></style>
-  <link href="codemirror-5.4.0/theme/ambiance.css" rel="import" type="css">
-  <link href="codemirror-5.4.0/theme/ambiance-mobile.css" rel="import" type="css">
-  <link href="codemirror-5.4.0/theme/blackboard.css" rel="import" type="css">
-  <link href="codemirror-5.4.0/theme/cobalt.css" rel="import" type="css">
-  <link href="codemirror-5.4.0/theme/eclipse.css" rel="import" type="css">
-  <link href="codemirror-5.4.0/theme/elegant.css" rel="import" type="css">
-  <link href="codemirror-5.4.0/theme/erlang-dark.css" rel="import" type="css">
-  <link href="codemirror-5.4.0/theme/lesser-dark.css" rel="import" type="css">
-  <link href="codemirror-5.4.0/theme/midnight.css" rel="import" type="css">
-  <link href="codemirror-5.4.0/theme/monokai.css" rel="import" type="css">
-  <link href="codemirror-5.4.0/theme/neat.css" rel="import" type="css">
-  <link href="codemirror-5.4.0/theme/night.css" rel="import" type="css">
-  <link href="codemirror-5.4.0/theme/rubyblue.css" rel="import" type="css">
-  <link href="codemirror-5.4.0/theme/solarized.css" rel="import" type="css">
-  <link href="codemirror-5.4.0/theme/twilight.css" rel="import" type="css">
-  <link href="codemirror-5.4.0/theme/vibrant-ink.css" rel="import" type="css">
-  <link href="codemirror-5.4.0/theme/xq-dark.css" rel="import" type="css">
-  <link href="codemirror-5.4.0/theme/xq-light.css" rel="import" type="css">
-  <link href="codemirror-5.4.0/addon/fold/foldgutter.css" rel="import" type="css">
-  <style>
-    .CodeMirror {
-      border: 1px solid #bbb;
-    }
-
-    .CodeMirror {
-      height: auto;
-    }
-
-    .CodeMirror-scroll {
-      max-height:300px;
-    }
-  </style>
   <template>
+    <style include="codemirror-styles"></style>
+    <style include="addon-foldgutter"></style>
+    <style include="theme-ambiance"></style>
+    <style include="theme-ambiance-mobile"></style>
+    <style include="theme-blackboard"></style>
+    <style include="theme-cobalt"></style>
+    <style include="theme-eclipse"></style>
+    <style include="theme-elegant"></style>
+    <style include="theme-erlang-dark"></style>
+    <style include="theme-lesser-dark"></style>
+    <style include="theme-midnight"></style>
+    <style include="theme-monokai"></style>
+    <style include="theme-neat"></style>
+    <style include="theme-night"></style>
+    <style include="theme-rubyblue"></style>
+    <style include="theme-solarized"></style>
+    <style include="theme-twilight"></style>
+    <style include="theme-vibrant-ink"></style>
+    <style include="theme-xq-light"></style>
+    <style include="theme-xq-dark"></style>
+    <style>
+      .CodeMirror {
+        border: 1px solid #bbb;
+      }
+
+      .CodeMirror {
+        height: auto;
+      }
+
+      .CodeMirror-scroll {
+        max-height: 300px;
+      }
+    </style>
   </template>
 </dom-module>
 <script>
@@ -92,7 +111,7 @@ license that can be found in the LICENSE file.
     },
     _isReady: false,
     _mirrorInstance: {},
-    ready: function () {
+    ready: function() {
       if (!this.value) {
         // copy content from innerHtml/childNodes if no value was provided
         var tc = "";
@@ -111,18 +130,18 @@ license that can be found in the LICENSE file.
         lineNumbers: !this.noLineNumbers,
         foldGutter: true,
         gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-//        viewportMargin: Infinity
+        //        viewportMargin: Infinity
       });
 
       var self = this;
-      this._mirrorInstance.on('blur', function (codeMirror, changeObj) {
+      this._mirrorInstance.on('blur', function(codeMirror, changeObj) {
         self.value = codeMirror.getValue();
       });
 
       this._isReady = true;
       this.valueChanged();
     },
-    attached: function () {
+    attached: function() {
       // *ij*
       // What is this here, you ask? Exactly! WTF is this?
       // This is a hack. A major one, at that.
@@ -135,17 +154,17 @@ license that can be found in the LICENSE file.
       // and dispatch it on the codemirror scroll area
       // using timeout is also important; I do not understand why exactly but its needed
       var self = this;
-      setTimeout(function () {
+      setTimeout(function() {
         self._mirrorInstance.refresh();
         self.maxLinesChanged(self.maxLines, self.maxLines);
       }, 100);
     },
-    refresh: function () {
+    refresh: function() {
       if (this._isReady) {
         this._mirrorInstance.refresh();
       }
     },
-    valueChanged: function () {
+    valueChanged: function() {
       var cursor;
       if (this._isReady) {
         cursor = this._mirrorInstance.getCursor();
@@ -153,27 +172,27 @@ license that can be found in the LICENSE file.
         this._mirrorInstance.setCursor(cursor);
       }
     },
-    modeChanged: function () {
+    modeChanged: function() {
       if (this._isReady) {
         this._mirrorInstance.setOption('mode', this.mode);
       }
     },
-    themeChanged: function () {
+    themeChanged: function() {
       if (this._isReady) {
         this._mirrorInstance.setOption('theme', this.theme);
       }
     },
-    tabSizeChanged: function () {
+    tabSizeChanged: function() {
       if (this._isReady) {
         this._mirrorInstance.setOption('tabSize', this.tabSize);
       }
     },
-    lineNumbersChanged: function () {
+    lineNumbersChanged: function() {
       if (this._isReady) {
         this._mirrorInstance.setOption('lineNumbers', !this.noLineNumbers);
       }
     },
-    maxLinesChanged: function (newValue, oldValue) {
+    maxLinesChanged: function(newValue, oldValue) {
       if (this._isReady) {
         var textHeight = this._mirrorInstance.defaultTextHeight();
         var codeMirror = this.getElementsByClassName('CodeMirror-scroll')[0];
@@ -190,12 +209,12 @@ license that can be found in the LICENSE file.
         this._mirrorInstance.refresh();
       }
     },
-    focus: function () {
+    focus: function() {
       if (this._isReady) {
         this._mirrorInstance.focus();
       }
     },
-    disabledChanged: function () {
+    disabledChanged: function() {
       if (this._isReady) {
         this._mirrorInstance.setOption('readOnly', this.disabled);
       }
