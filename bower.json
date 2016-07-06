@@ -1,8 +1,8 @@
 {
   "name": "code-mirror",
   "private": true,
-  "version": "5.4.0.0",
+  "version": "5.16.0.0",
   "dependencies": {
-    "polymer": "Polymer/polymer#master"
+    "polymer": "TangereJs/tangere#0.8-preview"
   }
 }
