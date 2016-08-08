@@ -4,6 +4,7 @@
 <link rel="import" href="codemirror-import.html">
 <link rel="import" href="styles/codemirror-styles.html">
 <link rel="import" href="styles/addon-foldgutter.html">
+<link rel="import" href="styles/addon-fullscreen.html">
 <link rel="import" href="styles/theme-ambiance.html">
 <link rel="import" href="styles/theme-ambiance-mobile.html">
 <link rel="import" href="styles/theme-blackboard.html">
@@ -28,6 +29,7 @@
   <template>
     <style include="codemirror-styles"></style>
     <style include="addon-foldgutter"></style>
+    <style include="addon-fullscreen"></style>
     <style include="theme-ambiance"></style>
     <style include="theme-ambiance-mobile"></style>
     <style include="theme-blackboard"></style>
@@ -129,6 +131,14 @@
         foldGutter: true,
         gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
         //        viewportMargin: Infinity
+        extraKeys: {
+          "F11": function(cm) {
+            cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+          },
+          "Esc": function(cm) {
+            if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+          }
+        }
       });
 
       var self = this;
