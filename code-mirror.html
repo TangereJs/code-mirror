@@ -71,7 +71,6 @@
       value: {
         type: String,
         value: '',
-        notify: true,
         observer: 'valueChanged'
       },
       mode: {
@@ -147,7 +146,6 @@
       });
 
       this._isReady = true;
-      this.valueChanged();
     },
     attached: function() {
       // *ij*
@@ -178,6 +176,8 @@
         cursor = this._mirrorInstance.getCursor();
         this._mirrorInstance.setValue(this.value);
         this._mirrorInstance.setCursor(cursor);
+
+        this.fire('value-changed', { value: this.value }, { bubbles: false });
       }
     },
     modeChanged: function() {
@@ -203,7 +203,7 @@
     maxLinesChanged: function(newValue, oldValue) {
       if (this._isReady) {
         var textHeight = this._mirrorInstance.defaultTextHeight();
-        var codeMirror = this.getElementsByClassName('CodeMirror-scroll')[0];
+        var codeMirror = Polymer.dom(this.root).querySelector('.CodeMirror-scroll');
         var numeric = parseInt(newValue);
 
         var newMaxHeight = textHeight * numeric;
@@ -222,7 +222,7 @@
         this._mirrorInstance.focus();
       }
     },
-    disabledChanged: function() {
+    disabledChanged: function(newValue, oldValue) {
       if (this._isReady) {
         this._mirrorInstance.setOption('readOnly', this.disabled);
       }
