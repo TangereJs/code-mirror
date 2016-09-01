@@ -222,6 +222,11 @@
         this._mirrorInstance.focus();
       }
     },
+    _getFocusableElement: function () {
+      if (this._isReady) {
+        return this._mirrorInstance.getInputField();
+      }
+    },
     disabledChanged: function(newValue, oldValue) {
       if (this._isReady) {
         this._mirrorInstance.setOption('readOnly', this.disabled);
