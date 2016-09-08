@@ -121,6 +121,8 @@
         this.value = tc;
       }
 
+      var self = this;
+
       this._mirrorInstance = CodeMirror(Polymer.dom(this.root), {
         value: this.value,
         mode: this.mode,
@@ -132,15 +134,26 @@
         //        viewportMargin: Infinity
         extraKeys: {
           "F11": function(cm) {
-            cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+            var codeMirrorScroll = Polymer.dom(self.root).querySelector('.CodeMirror-scroll');
+            var fullscreenOn = cm.getOption("fullScreen");
+            cm.setOption("fullScreen", !fullscreenOn);
+            fullscreenOn = !fullscreenOn;
+            if (fullscreenOn) {
+              Polymer.dom(codeMirrorScroll).setAttribute('style', 'max-height: none;');
+            } else {
+              Polymer.dom(codeMirrorScroll).removeAttribute('style');
+              self.maxLinesChanged(self.maxLines, undefined);
+            }
           },
           "Esc": function(cm) {
-            if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+            if (cm.getOption("fullScreen")) {
+              cm.setOption("fullScreen", false);
+              self.maxLinesChanged(self.maxLines, undefined);
+            }
           }
         }
       });
 
-      var self = this;
       this._mirrorInstance.on('blur', function(codeMirror, changeObj) {
         self.value = codeMirror.getValue();
       });
