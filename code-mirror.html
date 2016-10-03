@@ -110,7 +110,7 @@
     },
     _isReady: false,
     _mirrorInstance: {},
-    ready: function() {
+    ready: function () {
       if (!this.value) {
         // copy content from innerHtml/childNodes if no value was provided
         var tc = "";
@@ -133,7 +133,7 @@
         gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
         //        viewportMargin: Infinity
         extraKeys: {
-          "F11": function(cm) {
+          "F11": function (cm) {
             var codeMirrorScroll = Polymer.dom(self.root).querySelector('.CodeMirror-scroll');
             var fullscreenOn = cm.getOption("fullScreen");
             cm.setOption("fullScreen", !fullscreenOn);
@@ -145,22 +145,25 @@
               self.maxLinesChanged(self.maxLines, undefined);
             }
           },
-          "Esc": function(cm) {
+          "Esc": function (cm) {  // F11 doesn't work on Mac, so we use Esc to toggle as well
             if (cm.getOption("fullScreen")) {
               cm.setOption("fullScreen", false);
               self.maxLinesChanged(self.maxLines, undefined);
+            } else {
+              cm.setOption("fullScreen", true);
+              Polymer.dom(self.root).querySelector('.CodeMirror-scroll').setAttribute('style', 'max-height: none;');
             }
           }
         }
       });
 
-      this._mirrorInstance.on('blur', function(codeMirror, changeObj) {
+      this._mirrorInstance.on('blur', function (codeMirror, changeObj) {
         self.value = codeMirror.getValue();
       });
 
       this._isReady = true;
     },
-    attached: function() {
+    attached: function () {
       // *ij*
       // What is this here, you ask? Exactly! WTF is this?
       // This is a hack. A major one, at that.
@@ -173,17 +176,17 @@
       // and dispatch it on the codemirror scroll area
       // using timeout is also important; I do not understand why exactly but its needed
       var self = this;
-      setTimeout(function() {
+      setTimeout(function () {
         self._mirrorInstance.refresh();
         self.maxLinesChanged(self.maxLines, self.maxLines);
       }, 100);
     },
-    refresh: function() {
+    refresh: function () {
       if (this._isReady) {
         this._mirrorInstance.refresh();
       }
     },
-    valueChanged: function() {
+    valueChanged: function () {
       var cursor;
       if (this._isReady) {
         cursor = this._mirrorInstance.getCursor();
@@ -193,27 +196,27 @@
         this.fire('value-changed', { value: this.value }, { bubbles: false });
       }
     },
-    modeChanged: function() {
+    modeChanged: function () {
       if (this._isReady) {
         this._mirrorInstance.setOption('mode', this.mode);
       }
     },
-    themeChanged: function() {
+    themeChanged: function () {
       if (this._isReady) {
         this._mirrorInstance.setOption('theme', this.theme);
       }
     },
-    tabSizeChanged: function() {
+    tabSizeChanged: function () {
       if (this._isReady) {
         this._mirrorInstance.setOption('tabSize', this.tabSize);
       }
     },
-    lineNumbersChanged: function() {
+    lineNumbersChanged: function () {
       if (this._isReady) {
         this._mirrorInstance.setOption('lineNumbers', !this.noLineNumbers);
       }
     },
-    maxLinesChanged: function(newValue, oldValue) {
+    maxLinesChanged: function (newValue, oldValue) {
       if (this._isReady) {
         var textHeight = this._mirrorInstance.defaultTextHeight();
         var codeMirror = Polymer.dom(this.root).querySelector('.CodeMirror-scroll');
@@ -230,7 +233,7 @@
         this._mirrorInstance.refresh();
       }
     },
-    focus: function() {
+    focus: function () {
       if (this._isReady) {
         this._mirrorInstance.focus();
       }
@@ -240,7 +243,7 @@
         return this._mirrorInstance.getInputField();
       }
     },
-    disabledChanged: function(newValue, oldValue) {
+    disabledChanged: function (newValue, oldValue) {
       if (this._isReady) {
         this._mirrorInstance.setOption('readOnly', this.disabled);
       }
