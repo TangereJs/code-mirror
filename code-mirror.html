@@ -221,7 +221,7 @@
 
         var newMaxHeight = textHeight * numeric;
         if (newMaxHeight > 0) {
-          codeMirror.style['height'] = '';
+          codeMirror.style['height'] = newMaxHeight + 'px';
           codeMirror.style['max-height'] = newMaxHeight + "px";
         } else {
           codeMirror.style['max-height'] = 'none';
