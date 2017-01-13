@@ -3,6 +3,6 @@
   "private": true,
   "version": "5.16.0.8",
   "dependencies": {
-    "tangere": "TangereJs/tangere#0.8-preview"
+    "tangere": "TangereJs/tangere#master"
   }
 }
