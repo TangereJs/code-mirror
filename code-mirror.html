@@ -106,6 +106,11 @@
         type: Number,
         value: 14,
         observer: 'maxLinesChanged'
+      },
+      hide: {
+        type: Boolean,
+        value: false,
+        observer: "_hideChanged"
       }
     },
     _isReady: false,
@@ -192,6 +197,7 @@
         cursor = this._mirrorInstance.getCursor();
         this._mirrorInstance.setValue(this.value);
         this._mirrorInstance.setCursor(cursor);
+        this._mirrorInstance.refresh();
 
         this.fire('value-changed', { value: this.value }, { bubbles: false });
       }
@@ -217,13 +223,13 @@
       }
     },
     maxLinesChanged: function (newValue, oldValue) {
-      if (this._isReady) {
+      if (!this._isReady || !newValue) { return; }
         var textHeight = this._mirrorInstance.defaultTextHeight();
         var codeMirror = Polymer.dom(this.root).querySelector('.CodeMirror-scroll');
         var numeric = parseInt(newValue);
 
         var newMaxHeight = textHeight * numeric;
-        if (newMaxHeight > 0) {
+        if (newMaxHeight > 14) {
           codeMirror.style['height'] = '';
           codeMirror.style['max-height'] = newMaxHeight + "px";
         } else {
@@ -231,13 +237,23 @@
           codeMirror.style['height'] = 'auto';
         }
         this._mirrorInstance.refresh();
-      }
+
     },
     focus: function () {
       if (this._isReady) {
         this._mirrorInstance.focus();
       }
     },
+
+    _hideChanged: function (newValue, oldValue) {
+      if (this._isReady) {
+        var self = this;
+        this.async(function () {
+          self.maxLinesChanged(self.maxLines);
+        });
+      }
+    },
+
     _getFocusableElement: function () {
       if (this._isReady) {
         return this._mirrorInstance.getInputField();
