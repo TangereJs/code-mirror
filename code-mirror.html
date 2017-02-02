@@ -229,7 +229,9 @@
         var numeric = parseInt(newValue);
 
         var newMaxHeight = textHeight * numeric;
+
         if (newMaxHeight > 14) {
+          console.log('code mirror max-height set to ' + newMaxHeight + 'px');
           codeMirror.style['height'] = '';
           codeMirror.style['max-height'] = newMaxHeight + "px";
         } else {
@@ -237,8 +239,8 @@
           codeMirror.style['height'] = 'auto';
         }
         this._mirrorInstance.refresh();
-
     },
+
     focus: function () {
       if (this._isReady) {
         this._mirrorInstance.focus();
@@ -246,12 +248,8 @@
     },
 
     _hideChanged: function (newValue, oldValue) {
-      if (this._isReady) {
-        var self = this;
-        this.async(function () {
-          self.maxLinesChanged(self.maxLines);
-        });
-      }
+      if (!this._isReady) { return; }
+      this.maxLinesChanged(self.maxLines);
     },
 
     _getFocusableElement: function () {
