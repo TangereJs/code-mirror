@@ -163,7 +163,10 @@
       });
 
       this._mirrorInstance.on('blur', function (codeMirror, changeObj) {
+        self._isInternalUpdate = true;
         self.value = codeMirror.getValue();
+        self.fire('value-changed', { value: self.value }, { bubbles: false });
+        self._isInternalUpdate = false;
       });
 
       this._isReady = true;
@@ -192,15 +195,16 @@
       }
     },
     valueChanged: function () {
-      var cursor;
-      if (this._isReady) {
-        cursor = this._mirrorInstance.getCursor();
-        this._mirrorInstance.setValue(this.value);
-        this._mirrorInstance.setCursor(cursor);
-        this._mirrorInstance.refresh();
-
-        this.fire('value-changed', { value: this.value }, { bubbles: false });
+      if (!this._isReady || this._isInternalUpdate) {
+        return ;
       }
+
+      var cursor = this._mirrorInstance.getCursor();
+      this._mirrorInstance.setValue(this.value);
+      this._mirrorInstance.setCursor(cursor);
+      this._mirrorInstance.refresh();
+
+      this.fire('value-changed', { value: this.value }, { bubbles: false });
     },
     modeChanged: function () {
       if (this._isReady) {
