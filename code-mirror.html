@@ -227,7 +227,7 @@
       }
     },
     maxLinesChanged: function (newValue, oldValue) {
-      if (!this._isReady || !newValue) { return; }
+      if (!this._isReady) { return; }
         var textHeight = this._mirrorInstance.defaultTextHeight();
         var codeMirror = Polymer.dom(this.root).querySelector('.CodeMirror-scroll');
         var numeric = parseInt(newValue);
