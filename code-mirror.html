@@ -1,226 +1,241 @@
-
-
 <link rel="import" href="../tangere/tangere.html">
 <link rel="import" href="codemirror-import.html">
 
 <dom-module id="code-mirror">
   <template>
     <style>
-      .CodeMirror {
-        border: 1px solid #bbb;
-      }
+    .CodeMirror {
+      border: 1px solid #bbb;
+    }
 
-      .CodeMirror {
-        height: auto;
-      }
+    .CodeMirror {
+      height: auto;
+    }
 
-      .CodeMirror-scroll {
-        max-height: 300px;
-      }
+    .CodeMirror-scroll {
+      max-height: 300px;
+    }
     </style>
   </template>
 </dom-module>
+
 <script>
-  Polymer({
-    is: 'code-mirror',
-    properties: {
-      value: {
-        type: String,
-        value: '',
-        observer: 'valueChanged'
-      },
-      mode: {
-        type: String,
-        value: 'htmlmixed',
-        observer: 'modeChanged'
-      },
-      theme: {
-        type: String,
-        value: 'carbon',
-        observer: 'themeChanged'
-      },
-      tabSize: {
-        type: Number,
-        value: 2,
-        observer: 'tabSizeChanged'
-      },
-      noLineNumbers: {
-        type: Boolean,
-        value: false,
-        observer: 'lineNumbersChanged'
-      },
-      name: {
-        type: String,
-        value: ''
-      },
-      disabled: {
-        type: Boolean,
-        value: false,
-        observer: 'disabledChanged'
-      },
-      maxLines: {
-        type: Number,
-        value: 14,
-        observer: 'maxLinesChanged'
-      },
-      hide: {
-        type: Boolean,
-        value: false,
-        observer: "_hideChanged"
-      }
+Polymer({
+  is: 'code-mirror',
+  properties: {
+    value: {
+      type: String,
+      value: '',
+      observer: 'valueChanged'
     },
-    _isReady: false,
-    _mirrorInstance: {},
-    ready: function () {
-      if (!this.value) {
-        // copy content from innerHtml/childNodes if no value was provided
-        var tc = "";
-        var c = Polymer.dom(this).childNodes;
-        for (var i = 0; i < c.length; i++) {
-          tc += c[i].textContent;
-        }
-        this.value = tc;
+    mode: {
+      type: String,
+      value: 'htmlmixed',
+      observer: 'modeChanged'
+    },
+    theme: {
+      type: String,
+      value: 'carbon',
+      observer: 'themeChanged'
+    },
+    tabSize: {
+      type: Number,
+      value: 2,
+      observer: 'tabSizeChanged'
+    },
+    noLineNumbers: {
+      type: Boolean,
+      value: false,
+      observer: 'lineNumbersChanged'
+    },
+    name: {
+      type: String,
+      value: ''
+    },
+    disabled: {
+      type: Boolean,
+      value: false,
+      observer: 'disabledChanged'
+    },
+    maxLines: {
+      type: Number,
+      value: 14,
+      observer: 'maxLinesChanged'
+    },
+    hide: {
+      type: Boolean,
+      value: false,
+      observer: "_hideChanged"
+    }
+  },
+  _isReady: false,
+  _mirrorInstance: {},
+  ready: function() {
+    if (!this.value) {
+      // copy content from innerHtml/childNodes if no value was provided
+      var tc = "";
+      var c = Polymer.dom(this).childNodes;
+      for (var i = 0; i < c.length; i++) {
+        tc += c[i].textContent;
       }
-
-      var self = this;
-
-      this._mirrorInstance = CodeMirror(Polymer.dom(this.root), {
-        value: this.value,
-        mode: this.mode,
-        theme: this.theme,
-        tabSize: this.tabSize,
-        lineNumbers: !this.noLineNumbers,
-        foldGutter: true,
-        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-        //        viewportMargin: Infinity
-        extraKeys: {
-          "F11": function (cm) {
-            var codeMirrorScroll = Polymer.dom(self.root).querySelector('.CodeMirror-scroll');
-            var fullscreenOn = cm.getOption("fullScreen");
-            cm.setOption("fullScreen", !fullscreenOn);
-            fullscreenOn = !fullscreenOn;
-            if (fullscreenOn) {
-              Polymer.dom(codeMirrorScroll).setAttribute('style', 'max-height: none;');
-            } else {
-              Polymer.dom(codeMirrorScroll).removeAttribute('style');
-              self.maxLinesChanged(self.maxLines, undefined);
-            }
-          },
-          "Esc": function (cm) {  // F11 doesn't work on Mac, so we use Esc to toggle as well
-            if (cm.getOption("fullScreen")) {
-              cm.setOption("fullScreen", false);
-              self.maxLinesChanged(self.maxLines, undefined);
-            } else {
-              cm.setOption("fullScreen", true);
-              Polymer.dom(self.root).querySelector('.CodeMirror-scroll').setAttribute('style', 'max-height: none;');
-            }
+      this.value = tc;
+    }
+    var self = this;
+    this._mirrorInstance = CodeMirror(Polymer.dom(this.root), {
+      value: this.value,
+      mode: this.mode,
+      theme: this.theme,
+      tabSize: this.tabSize,
+      lineNumbers: !this.noLineNumbers,
+      foldGutter: true,
+      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+      //        viewportMargin: Infinity
+      extraKeys: {
+        "F11": function(cm) {
+          var codeMirrorScroll = Polymer.dom(self.root).querySelector('.CodeMirror-scroll');
+          var fullscreenOn = cm.getOption("fullScreen");
+          cm.setOption("fullScreen", !fullscreenOn);
+          fullscreenOn = !fullscreenOn;
+          if (fullscreenOn) {
+            Polymer.dom(codeMirrorScroll).setAttribute('style', 'max-height: none;');
+          } else {
+            Polymer.dom(codeMirrorScroll).removeAttribute('style');
+            self.maxLinesChanged(self.maxLines, undefined);
+          }
+        },
+        "Esc": function(cm) { // F11 doesn't work on Mac, so we use Esc to toggle as well
+          if (cm.getOption("fullScreen")) {
+            cm.setOption("fullScreen", false);
+            self.maxLinesChanged(self.maxLines, undefined);
+          } else {
+            cm.setOption("fullScreen", true);
+            Polymer.dom(self.root).querySelector('.CodeMirror-scroll').setAttribute('style', 'max-height: none;');
           }
         }
-      });
-
-      this._mirrorInstance.on('blur', function (codeMirror, changeObj) {
-        self._isInternalUpdate = true;
-        self.value = codeMirror.getValue();
-        self.fire('value-changed', { value: self.value }, { bubbles: false });
-        self._isInternalUpdate = false;
-      });
-
-      this._isReady = true;
-    },
-    attached: function () {
-      // *ij*
-      // What is this here, you ask? Exactly! WTF is this?
-      // This is a hack. A major one, at that.
-      // 1) I observed that initially codeMirror does not display itself correctly when inside shadyDOM
-      // 2) I also observed that when you click the codeMirror area component displays itself correctly
-      // Via debugging I have found out that when you click the component as described in 2)
-      // CodeMirror-scroll area captures and responds to a mousedown event
-      // not only that, but which mouse button was clicked is also important
-      // So, a solution is to create a mouse event, initialize it (set event's button property)
-      // and dispatch it on the codemirror scroll area
-      // using timeout is also important; I do not understand why exactly but its needed
-      var self = this;
-      setTimeout(function () {
-        self._mirrorInstance.refresh();
-        self.maxLinesChanged(self.maxLines, self.maxLines);
-      }, 100);
-    },
-    refresh: function () {
-      if (this._isReady) {
-        this._mirrorInstance.refresh();
       }
-    },
-    valueChanged: function () {
-      if (!this._isReady || this._isInternalUpdate) {
-        return ;
+    });
+    this._mirrorInstance.on('blur', function(codeMirror, changeObj) {
+      self._isInternalUpdate = true;
+      self.value = codeMirror.getValue();
+      self._fireValueChangedEvent(self.value);
+      self._isInternalUpdate = false;
+    });
+    this._mirrorInstance.on("inputRead", function(instance) {
+      if (instance.state.completionActive) {
+        return;
       }
-
-      var cursor = this._mirrorInstance.getCursor();
-      this._mirrorInstance.setValue(this.value);
-      this._mirrorInstance.setCursor(cursor);
+      var cur = instance.getCursor();
+      var token = instance.getTokenAt(cur);
+      var string = '';
+      if (token.string.match(/^[.`\w@]\w*$/)) {
+        string = token.string;
+      }
+      if (string.length > 0) {
+        CodeMirror.commands.autocomplete(instance);
+      }
+    });
+    this._isReady = true;
+  },
+  attached: function() {
+    // *ij*
+    // What is this here, you ask? Exactly! WTF is this?
+    // This is a hack. A major one, at that.
+    // 1) I observed that initially codeMirror does not display itself correctly when inside shadyDOM
+    // 2) I also observed that when you click the codeMirror area component displays itself correctly
+    // Via debugging I have found out that when you click the component as described in 2)
+    // CodeMirror-scroll area captures and responds to a mousedown event
+    // not only that, but which mouse button was clicked is also important
+    // So, a solution is to create a mouse event, initialize it (set event's button property)
+    // and dispatch it on the codemirror scroll area
+    // using timeout is also important; I do not understand why exactly but its needed
+    var self = this;
+    setTimeout(function() {
+      self._mirrorInstance.refresh();
+      self.maxLinesChanged(self.maxLines, self.maxLines);
+    }, 100);
+  },
+  refresh: function() {
+    if (this._isReady) {
       this._mirrorInstance.refresh();
-
-      this.fire('value-changed', { value: this.value }, { bubbles: false });
-    },
-    modeChanged: function () {
-      if (this._isReady) {
-        this._mirrorInstance.setOption('mode', this.mode);
-      }
-    },
-    themeChanged: function () {
-      if (this._isReady) {
-        this._mirrorInstance.setOption('theme', this.theme);
-      }
-    },
-    tabSizeChanged: function () {
-      if (this._isReady) {
-        this._mirrorInstance.setOption('tabSize', this.tabSize);
-      }
-    },
-    lineNumbersChanged: function () {
-      if (this._isReady) {
-        this._mirrorInstance.setOption('lineNumbers', !this.noLineNumbers);
-      }
-    },
-    maxLinesChanged: function (newValue, oldValue) {
-      if (!this._isReady) { return; }
-        var textHeight = this._mirrorInstance.defaultTextHeight();
-        var codeMirror = Polymer.dom(this.root).querySelector('.CodeMirror-scroll');
-        var numeric = parseInt(newValue);
-
-        var newMaxHeight = textHeight * numeric;
-
-        if (newMaxHeight > 14) {
-          console.log('code mirror max-height set to ' + newMaxHeight + 'px');
-          codeMirror.style['height'] = '';
-          codeMirror.style['max-height'] = newMaxHeight + "px";
-        } else {
-          codeMirror.style['max-height'] = 'none';
-          codeMirror.style['height'] = 'auto';
-        }
-        this._mirrorInstance.refresh();
-    },
-
-    focus: function () {
-      if (this._isReady) {
-        this._mirrorInstance.focus();
-      }
-    },
-
-    _hideChanged: function (newValue, oldValue) {
-      if (!this._isReady) { return; }
-      this.maxLinesChanged(self.maxLines);
-    },
-
-    _getFocusableElement: function () {
-      if (this._isReady) {
-        return this._mirrorInstance.getInputField();
-      }
-    },
-    disabledChanged: function (newValue, oldValue) {
-      if (this._isReady) {
-        this._mirrorInstance.setOption('readOnly', this.disabled);
-      }
     }
-  });
+  },
+  valueChanged: function() {
+    if (!this._isReady || this._isInternalUpdate) {
+      return;
+    }
+    var cursor = this._mirrorInstance.getCursor();
+    this._mirrorInstance.setValue(this.value);
+    this._mirrorInstance.setCursor(cursor);
+    this._mirrorInstance.refresh();
+    this._fireValueChangedEvent(this.value);
+  },
+  modeChanged: function() {
+    if (this._isReady) {
+      this._mirrorInstance.setOption('mode', this.mode);
+    }
+  },
+  themeChanged: function() {
+    if (this._isReady) {
+      this._mirrorInstance.setOption('theme', this.theme);
+    }
+  },
+  tabSizeChanged: function() {
+    if (this._isReady) {
+      this._mirrorInstance.setOption('tabSize', this.tabSize);
+    }
+  },
+  lineNumbersChanged: function() {
+    if (this._isReady) {
+      this._mirrorInstance.setOption('lineNumbers', !this.noLineNumbers);
+    }
+  },
+  maxLinesChanged: function(newValue, oldValue) {
+    if (!this._isReady) {
+      return;
+    }
+    var textHeight = this._mirrorInstance.defaultTextHeight();
+    var codeMirror = Polymer.dom(this.root).querySelector('.CodeMirror-scroll');
+    var numeric = parseInt(newValue);
+    var newMaxHeight = textHeight * numeric;
+    if (newMaxHeight > 14) {
+      console.log('code mirror max-height set to ' + newMaxHeight + 'px');
+      codeMirror.style['height'] = '';
+      codeMirror.style['max-height'] = newMaxHeight + "px";
+    } else {
+      codeMirror.style['max-height'] = 'none';
+      codeMirror.style['height'] = 'auto';
+    }
+    this._mirrorInstance.refresh();
+  },
+  focus: function() {
+    if (this._isReady) {
+      this._mirrorInstance.focus();
+    }
+  },
+  _hideChanged: function(newValue, oldValue) {
+    if (!this._isReady) {
+      return;
+    }
+    this.maxLinesChanged(this.maxLines);
+  },
+  _getFocusableElement: function() {
+    if (this._isReady) {
+      return this._mirrorInstance.getInputField();
+    }
+  },
+  disabledChanged: function(newValue, oldValue) {
+    if (this._isReady) {
+      this._mirrorInstance.setOption('readOnly', this.disabled);
+    }
+  },
+
+  // fires a non bubbling value-changed event
+  _fireValueChangedEvent: function(newValue) {
+    this.fire('value-changed', {
+      value: newValue
+    }, {
+      bubbles: false
+    });
+  }
+});
 </script>
