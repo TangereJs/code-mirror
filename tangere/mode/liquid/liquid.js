@@ -13,7 +13,7 @@
 })(function(CodeMirror) {
   "use strict";
 
-  CodeMirror.defineMode("liquid:inner", function() {
+  CodeMirror.defineMode("liquid", function() {
     var keywords = ["block", "endblock", "for", "endfor", "true", "false", "filter", "endfilter",
                     "loop", "none", "self", "super", "if", "elif", "endif", "as", "else", "import",
                     "with", "endwith", "without", "context", "ifequal", "endifequal", "ifnotequal",
@@ -346,11 +346,11 @@
     };
   });
 
-  CodeMirror.defineMode("liquid", function(config) {
-    var htmlBase = CodeMirror.getMode(config, "text/html");
-    var liquidInner = CodeMirror.getMode(config, "liquid:inner");
-    return CodeMirror.overlayMode(htmlBase, liquidInner);
-  });
+  // CodeMirror.defineMode("liquid", function(config) {
+  //   var htmlBase = CodeMirror.getMode(config, "text/html");
+  //   var liquidInner = CodeMirror.getMode(config, "liquid:inner");
+  //   return CodeMirror.overlayMode(htmlBase, liquidInner);
+  // });
 
   CodeMirror.defineMIME("text/x-liquid", "liquid");
 });

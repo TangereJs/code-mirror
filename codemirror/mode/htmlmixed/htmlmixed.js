@@ -109,6 +109,14 @@
       } else if (state.inTag) {
         state.inTag += stream.current()
         if (stream.eol()) state.inTag += " "
+      } else if (/[{%][\w]*[%}]$/.test(stream.string)) {
+        var liquidModeSpec = CodeMirror.resolveMode("text/x-liquid");
+        var mode = CodeMirror.getMode(config, liquidModeSpec);
+        state.localMode = mode;
+        state.localState = CodeMirror.startState(mode);
+        state.token = function(stream, state) {
+          return state.localMode.token(stream, state.localState);
+        }
       }
       return style;
     };
@@ -146,7 +154,7 @@
         return {state: state.localState || state.htmlState, mode: state.localMode || htmlMode};
       }
     };
-  }, "xml", "javascript", "css");
+  }, "xml", "javascript", "css", "liquid");
 
   CodeMirror.defineMIME("text/html", "htmlmixed");
 });
