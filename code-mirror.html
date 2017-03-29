@@ -124,15 +124,15 @@ Polymer({
       if (instance.state.completionActive) {
         return;
       }
-      var cur = instance.getCursor();
-      var token = instance.getTokenAt(cur);
-      var string = '';
-      if (token.string.match(/^[.`\w@]\w*$/)) {
-        string = token.string;
-      }
-      if (string.length > 0) {
+      // var cur = instance.getCursor();
+      // var token = instance.getTokenAt(cur);
+      // var string = '';
+      // if (token.string.match(/^[.`\w@]\w*$/)) {
+      //   string = token.string;
+      // }
+      // if (string.length > 0) {
         CodeMirror.commands.autocomplete(instance);
-      }
+      // }
     });
     this._isReady = true;
   },
