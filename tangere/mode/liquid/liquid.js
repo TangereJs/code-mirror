@@ -65,6 +65,25 @@
       return null;
     }
 
+    // we need this function for liquidmixed mode 
+    // this function just peeks the stream and checks if current token is a liquid token
+    // and does not advance the stream
+    // we can't use tokenBase instead because it advances the stream
+    function peekToken(stream, state) {
+      if (stream.match("{{")) {
+        state.tokenize = inVariable;
+        return "tag";
+      } else if (stream.match("{%")) {
+        state.tokenize = inTag;
+        return "tag";
+      } else if (stream.match("{#")) {
+        state.tokenize = inComment;
+        return "comment";
+      }      
+
+      return null;
+    }
+
     // A string can be included in either single or double quotes (this is
     // the delimiter). Mark everything as a string until the start delimiter
     // occurs again.
@@ -336,7 +355,14 @@
 
     return {
       startState: function () {
-        return {tokenize: tokenBase};
+        return {
+          tokenize: tokenBase,
+          // we need this function for liquidmixed mode 
+          // this function just peeks the stream and checks if current token is a liquid token
+          // and does not advance the stream
+          // we can't use tokenize/tokenBase instead because it advances the stream
+          peekToken: peekToken
+        };
       },
       token: function (stream, state) {
         return state.tokenize(stream, state);

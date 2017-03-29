@@ -115,7 +115,8 @@
         if (stream.eol()) state.inTag += " "          
       } else if (style === null) {
         liquidState = liquidMode.startState();
-        style = liquidState.tokenize(stream, liquidState);
+        // we peeks the stream and checks if current token is a liquid token
+        style = liquidState.peekToken(stream, liquidState);
         if (style !== null && style === "tag") {
           state.localMode = liquidMode;
           state.localState = liquidState;
