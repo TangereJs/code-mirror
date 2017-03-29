@@ -77,10 +77,6 @@
       multilineTagIndentPastTag: parserConfig.multilineTagIndentPastTag
     });
 
-    var liquidModeSpec = CodeMirror.resolveMode("text/x-liquid");
-    var liquidMode = CodeMirror.getMode(config, liquidModeSpec);
-    var liquidState;
-
     var tags = {};
     var configTags = parserConfig && parserConfig.tags, configScript = parserConfig && parserConfig.scriptTypes;
     addTags(defaultTags, tags);
@@ -112,23 +108,7 @@
         state.localState = CodeMirror.startState(mode, htmlMode.indent(state.htmlState, ""));
       } else if (state.inTag) {
         state.inTag += stream.current()
-        if (stream.eol()) state.inTag += " "          
-      } else if (style === null) {
-        liquidState = liquidMode.startState();
-        style = liquidState.tokenize(stream, liquidState);
-        if (style !== null && style === "tag") {
-          state.localMode = liquidMode;
-          state.localState = liquidState;
-          state.token = function(stream, state) {
-            var style = liquidState.tokenize(stream, state.localState);
-            if (style === "tag") {
-              state.localMode = state.localState = null;
-              liquidState = liquidMode.startState();
-              state.token = html;
-            }
-            return style;
-          }       
-        }
+        if (stream.eol()) state.inTag += " "
       }
       return style;
     };
@@ -166,7 +146,7 @@
         return {state: state.localState || state.htmlState, mode: state.localMode || htmlMode};
       }
     };
-  }, "xml", "javascript", "css", "liquid");
+  }, "xml", "javascript", "css");
 
   CodeMirror.defineMIME("text/html", "htmlmixed");
 });

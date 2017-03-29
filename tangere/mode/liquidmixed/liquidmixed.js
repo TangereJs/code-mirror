@@ -69,7 +69,7 @@
     }
   }
 
-  CodeMirror.defineMode("htmlmixed", function (config, parserConfig) {
+  CodeMirror.defineMode("liquidmixed", function (config, parserConfig) {
     var htmlMode = CodeMirror.getMode(config, {
       name: "xml",
       htmlMode: true,
@@ -168,5 +168,5 @@
     };
   }, "xml", "javascript", "css", "liquid");
 
-  CodeMirror.defineMIME("text/html", "htmlmixed");
+  CodeMirror.defineMIME("text/html", "liquidmixed");
 });
