@@ -71,7 +71,7 @@
 
   CodeMirror.defineMode("liquidmixed", function (config, parserConfig) {
     var htmlMode = CodeMirror.getMode(config, {
-      name: "xml",
+      name: "liquidxml",
       htmlMode: true,
       multilineTagIndentFactor: parserConfig.multilineTagIndentFactor,
       multilineTagIndentPastTag: parserConfig.multilineTagIndentPastTag
@@ -167,7 +167,7 @@
         return {state: state.localState || state.htmlState, mode: state.localMode || htmlMode};
       }
     };
-  }, "xml", "javascript", "css", "liquid");
+  }, "liquidxml", "javascript", "css", "liquid");
 
   CodeMirror.defineMIME("text/html", "liquidmixed");
 });
