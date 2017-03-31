@@ -89,10 +89,17 @@
       tags.script.unshift(["type", configScript[i].matches, configScript[i].mode])
 
     function html(stream, state) {
-      var style = htmlMode.token(stream, state.htmlState), tag = /\btag\b/.test(style), tagName
+      if (!state.parsingStack) { state.parsingStack = []; }
+      var style = htmlMode.token(stream, state.htmlState), tag = /\btag\b/.test(style), tagName 
+      
+
+      if (style !== null) {
+        state.parsingStack.push(style);
+      }
+
       if (tag && !/[<>\s\/]/.test(stream.current()) &&
           (tagName = state.htmlState.tagName && state.htmlState.tagName.toLowerCase()) &&
-          tags.hasOwnProperty(tagName)) {
+          tags.hasOwnProperty(tagName)) {        
         state.inTag = tagName + " "
       } else if (state.inTag && tag && />$/.test(stream.current())) {
         var inTag = /^([\S]+) (.*)/.exec(state.inTag)
@@ -112,25 +119,40 @@
         state.localState = CodeMirror.startState(mode, htmlMode.indent(state.htmlState, ""));
       } else if (state.inTag) {
         state.inTag += stream.current()
-        if (stream.eol()) state.inTag += " "          
+        if (stream.eol()) state.inTag += " "
       } else if (style === null) {
         liquidState = liquidMode.startState();
+        if (!liquidState.parsingStack) { liquidState.parsingStack = []; }
         // we peeks the stream and checks if current token is a liquid token
         style = liquidState.peekToken(stream, liquidState);
         if (style !== null && style === "tag") {
+          liquidState.parsingStack.push(style);
           state.localMode = liquidMode;
           state.localState = liquidState;
           state.token = function(stream, state) {
             var style = liquidState.tokenize(stream, state.localState);
             if (style === "tag") {
+              state.localState.parsingStack.pop();
               state.localMode = state.localState = null;
               liquidState = liquidMode.startState();
               state.token = html;
             }
             return style;
           }       
+        } else if (!state.inTag && !state.parsingStack.length) {
+          // eat whitespace          
+          stream.eatSpace();
+
+          // extract first non whitespace character and discard it
+          while (!stream.eol() && !/[\s\u00a0]/.test(stream.peek())) {
+            stream.next();
+          }
+
+          // return
+
+          return style;
         }
-      }
+      } 
       return style;
     };
 

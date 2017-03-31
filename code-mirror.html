@@ -121,18 +121,13 @@ Polymer({
       self._isInternalUpdate = false;
     });
     this._mirrorInstance.on("inputRead", function(instance) {
-      if (instance.state.completionActive) {
+      var cur = instance.getCursor();
+      var token = instance.getTokenAt(cur);
+      
+      if (instance.state.completionActive && token.string !== " ") {
         return;
       }
-      // var cur = instance.getCursor();
-      // var token = instance.getTokenAt(cur);
-      // var string = '';
-      // if (token.string.match(/^[.`\w@]\w*$/)) {
-      //   string = token.string;
-      // }
-      // if (string.length > 0) {
-        CodeMirror.commands.autocomplete(instance);
-      // }
+      CodeMirror.commands.autocomplete(instance);
     });
     this._isReady = true;
   },
