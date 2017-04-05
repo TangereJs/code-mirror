@@ -97,7 +97,7 @@
       tprop = getToken(editor, Pos(cur.line, tprop.start));
       if (tprop.string != ".") return;
       tprop = getToken(editor, Pos(cur.line, tprop.start));
-      if (!context1) var contex1t = [];
+      if (!context1) var context1 = [];
       context1.push(tprop);
     }
 

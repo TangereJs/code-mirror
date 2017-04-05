@@ -95,6 +95,21 @@
 
       if (style !== null) {
         state.parsingStack.push(style);
+
+        if (style === "tag bracket") {
+          var openBracketFound = false;
+          var count = 1;
+          for (var i = state.parsingStack.length - 2; i >= 0 && !openBracketFound; i--) {
+            var head = state.parsingStack[i];
+            openBracketFound = style === head;
+            count += 1;
+          }
+          if (openBracketFound) {
+            for (var i = 0; i < count; i++) {
+              state.parsingStack.pop();
+            }
+          }
+        }
       }
 
       if (tag && !/[<>\s\/]/.test(stream.current()) &&
@@ -111,6 +126,7 @@
           if (stream.match(endTagA, false)) {
             state.token = html;
             state.localState = state.localMode = null;
+            state.parsingStack = [];
             return null;
           }
           return maybeBackup(stream, endTag, state.localMode.token(stream, state.localState));
