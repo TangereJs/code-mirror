@@ -37,6 +37,13 @@
                     "csrf_token", "autoescape", "endautoescape", "spaceless", "endspaceless",
                     "ssi", "templatetag", "verbatim", "endverbatim", "widthratio"];
 
+  liquidKeywords = liquidKeywords.sort(function(key1, key2) {
+    if (key1 === key2) {
+      return 1;
+    }
+    return key1 > key2 ? 1 : -1;
+  });
+
   var liquidFilters = ["add", "addslashes", "capfirst", "center", "cut", "date",
                    "default", "default_if_none", "dictsort",
                    "dictsortreversed", "divisibleby", "escape", "escapejs",
@@ -50,6 +57,13 @@
                    "truncatechars_html", "truncatewords", "truncatewords_html",
                    "unordered_list", "upper", "urlencode", "urlize",
                    "urlizetrunc", "wordcount", "wordwrap", "yesno"];
+
+    liquidFilters = liquidFilters.sort(function(key1, key2) {
+    if (key1 === key2) {
+      return 1;
+    }
+    return key1 > key2 ? 1 : -1;
+  });
 
   var context = [];
 
