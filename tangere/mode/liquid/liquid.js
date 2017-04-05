@@ -50,12 +50,15 @@
       // Attempt to identify a variable, template or comment tag respectively
       if (stream.match("{{")) {
         state.tokenize = inVariable;
+        state.parsingStack.push("variable");
         return "tag";
       } else if (stream.match("{%")) {
         state.tokenize = inTag;
+        state.parsingStack.push("tag");
         return "tag";
       } else if (stream.match("{#")) {
         state.tokenize = inComment;
+        state.parsingStack.push("comment");
         return "comment";
       }
 
@@ -72,12 +75,15 @@
     function peekToken(stream, state) {
       if (stream.match("{{")) {
         state.tokenize = inVariable;
+        state.parsingStack.push("variable");
         return "tag";
       } else if (stream.match("{%")) {
         state.tokenize = inTag;
+        state.parsingStack.push("tag");
         return "tag";
       } else if (stream.match("{#")) {
         state.tokenize = inComment;
+        state.parsingStack.push("comment");
         return "comment";
       }      
 
@@ -161,8 +167,8 @@
 
       // Highlight filters
       if (state.waitFilter) {
-          state.waitFilter = false;
         if (stream.match(filters)) {
+          state.waitFilter = false;
           return "variable-2";
         }
       }
@@ -201,6 +207,7 @@
         state.waitDot = null;
         state.waitPipe = null;
         state.tokenize = tokenBase;
+        state.parsingStack.pop();
         return "tag";
       }
 
@@ -326,6 +333,7 @@
         } else {
           state.tokenize = tokenBase;
         }
+        state.parsingStack.pop();
         return "tag";
       }
 
@@ -337,7 +345,8 @@
     // Mark everything as comment inside the tag and the tag itself.
     function inComment (stream, state) {
       if (stream.match(/^.*?#\}/)) state.tokenize = tokenBase
-      else stream.skipToEnd()
+      else stream.skipToEnd();
+      state.parsingStack.pop();
       return "comment";
     }
 
@@ -361,7 +370,9 @@
           // this function just peeks the stream and checks if current token is a liquid token
           // and does not advance the stream
           // we can't use tokenize/tokenBase instead because it advances the stream
-          peekToken: peekToken
+          peekToken: peekToken,
+
+          parsingStack: []
         };
       },
       token: function (stream, state) {

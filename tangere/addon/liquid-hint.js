@@ -51,6 +51,8 @@
                    "unordered_list", "upper", "urlencode", "urlize",
                    "urlizetrunc", "wordcount", "wordwrap", "yesno"];
 
+  var context = [];
+
   function liquidHintFn(editor, keywords, getToken, options) {
     // Find the token at the cursor
     var cur = editor.getCursor(), token = getToken(editor, cur);    
@@ -66,39 +68,63 @@
       token.string = token.string.slice(0, cur.ch - token.start);
     }
 
+    var topScope = token.state.parsingStack[token.state.parsingStack.length-1];
+    if (!token.state.waitFilter && !token.state.waitPipe) {
+      context = [];
+    // } else if (token.state.waitPipe && !token.state.waitFilter) {
+    //   context = []; //.push('startfilter');
+    } else if (token.state.waitFilter && !token.state.waitPipe) {
+      context.push('startfilter');
+    }
+
     var tprop = token;
     // If it is a property, find out what it is a property of.
     while (tprop.type == "property") {
       tprop = getToken(editor, Pos(cur.line, tprop.start));
       if (tprop.string != ".") return;
       tprop = getToken(editor, Pos(cur.line, tprop.start));
-      if (!context) var context = [];
-      context.push(tprop);
+      if (!context1) var contex1t = [];
+      context1.push(tprop);
     }
 
     var result = [];
 
-    liquidKeywords.forEach(function(keyword, index) {
-      if (keyword.indexOf(token.string) == 0) {
-        result.push(keyword);
-      }
-    });
-
-    liquidFilters.forEach(function(filter, index) {
-      if (filter.indexOf(token.string) == 0) {
-        result.push(filter);
-      }
-    });
+    if (topScope === "tag" && !context.length) {
+      // suggest keywords here
+      liquidKeywords.forEach(function(keyword, index) {
+        if (keyword.indexOf(token.string) == 0) {
+          result.push(keyword);
+        }
+      });
+    } else if (topScope === "tag" && context.length) {
+      // suggest filters here
+      liquidFilters.forEach(function(filter, index) {
+        if (filter.indexOf(token.string) == 0) {
+          result.push(filter);
+        }
+      });
+    } else if (topScope === "variable" && !context.length) {
+      // suggest variables here
+    } else if (topScope === "variable" && context.length) {
+      // suggest filters here
+      liquidFilters.forEach(function(filter, index) {
+        if (filter.indexOf(token.string) == 0) {
+          result.push(filter);
+        }
+      });
+    }
 
     return {list: result,
             from: Pos(cur.line, token.start),
             to: Pos(cur.line, token.end)};
   }
 
+  function getTokenFn(e, cur) {
+    return e.getTokenAt(cur);
+  }
+
   function liquidHint(editor, options) {
-    return liquidHintFn(editor, liquidKeywords,
-                      function (e, cur) {return e.getTokenAt(cur);},
-                      options);
+    return liquidHintFn(editor, liquidKeywords, getTokenFn, options);
   };
   CodeMirror.registerHelper("hint", "liquid", liquidHint);
 });

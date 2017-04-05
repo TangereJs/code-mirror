@@ -125,13 +125,12 @@
         if (!liquidState.parsingStack) { liquidState.parsingStack = []; }
         // we peeks the stream and checks if current token is a liquid token
         style = liquidState.peekToken(stream, liquidState);
-        if (style !== null && style === "tag") {
-          liquidState.parsingStack.push(style);
+        if (style !== null && ["tag", "variable"].indexOf(style) > -1) {
           state.localMode = liquidMode;
           state.localState = liquidState;
           state.token = function(stream, state) {
             var style = liquidState.tokenize(stream, state.localState);
-            if (style === "tag") {
+            if (!state.localState.parsingStack.length) {
               state.localState.parsingStack.pop();
               state.localMode = state.localState = null;
               liquidState = liquidMode.startState();
