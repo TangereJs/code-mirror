@@ -86,10 +86,17 @@
             quote = token.string.charAt(len - 1);
             prefix = token.string.substr(n, len - 2);
           }
-          replaceToken = true;
+          replaceToken = prefix !== "" ? false : true;
         }
-        for (var i = 0; i < atValues.length; ++i) if (!prefix || atValues[i].lastIndexOf(prefix, 0) == 0)
-          result.push(quote + atValues[i] + quote);
+
+        var trimmedPrefix = prefix ? prefix.trim() : "";
+        quote = trimmedPrefix === "" ? "\"" : "";
+        for (var i = 0; i < atValues.length; ++i) {//if (!prefix || atValues[i].lastIndexOf(prefix, 0) == 0)
+          var currentValue = atValues[i];
+          if (trimmedPrefix.indexOf(currentValue) == -1) {
+            result.push(quote + currentValue + quote);
+          }
+        }
       } else { // An attribute name
         if (token.type == "attribute") {
           prefix = token.string;
