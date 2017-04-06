@@ -68,11 +68,26 @@
         attrs = set;
       }
       if (token.type == "string" || token.string == "=") { // A value
+        var existingClasses = [];
         var before = cm.getRange(Pos(cur.line, Math.max(0, cur.ch - 60)),
                                  Pos(cur.line, token.type == "string" ? token.start : token.end));
         var atName = before.match(/([^\s\u00a0=<>\"\']+)=$/), atValues;
         if (!atName || !attrs.hasOwnProperty(atName[1]) || !(atValues = attrs[atName[1]])) return;
         if (typeof atValues == 'function') atValues = atValues.call(this, cm); // Functions can be used to supply values for autocomplete widget
+        
+        if (atName[1] === "class") {
+          var classesBefore = token.string.match(/\w+/g);
+          var after = cm.getRange(Pos(cur.line, token.end), Pos(cur.line, 100));
+          var classesAfter = after.match(/\w+/g);
+          if (classesBefore !== null) {
+            existingClasses = classesBefore;
+          }
+          if (classesAfter !== null) {
+            existingClasses = existingClasses.concat(classesAfter);
+          }
+          console.log('existing classes '+ existingClasses);
+        }
+
         if (token.type == "string") {
           prefix = token.string;
           var n = 0;
@@ -86,17 +101,42 @@
             quote = token.string.charAt(len - 1);
             prefix = token.string.substr(n, len - 2);
           }
-          replaceToken = prefix !== "" ? false : true;
+          replaceToken = existingClasses.length ? false : true;
         }
 
-        var trimmedPrefix = prefix ? prefix.trim() : "";
-        quote = trimmedPrefix === "" ? "\"" : "";
-        for (var i = 0; i < atValues.length; ++i) {//if (!prefix || atValues[i].lastIndexOf(prefix, 0) == 0)
+        existingClasses = existingClasses.join(" ");
+        quote = existingClasses === "" ? "\"" : "";
+        var intermediateResult = [];
+        for (var i = 0; i < atValues.length; ++i) {//if ()
           var currentValue = atValues[i];
-          if (trimmedPrefix.indexOf(currentValue) == -1) {
-            result.push(quote + currentValue + quote);
+
+          if (existingClasses.indexOf(currentValue) == -1) {
+            intermediateResult.push(quote + currentValue + quote);
           }
         }
+
+        if (token) {
+          var compareValue = token.string;
+          if (token.string === "=" || token.string ==="\"") {
+            compareValue="";
+          }
+          var tokenWordCount = token.string.match(/\w+/g);
+          if (tokenWordCount) {
+            if (tokenWordCount.length < 2) {
+              compareValue = "";
+            } else {
+              compareValue = tokenWordCount[tokenWordCount.length-1];
+            }
+          }
+
+          for (var j1=0; j1 < intermediateResult.length; ++j1) {          
+            if (intermediateResult[j1].indexOf(compareValue) > -1){
+              result.push(intermediateResult[j1]);
+            }
+          }
+          
+        }
+      
       } else { // An attribute name
         if (token.type == "attribute") {
           prefix = token.string;
