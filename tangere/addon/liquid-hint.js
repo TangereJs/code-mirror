@@ -73,14 +73,16 @@
     if (/\b(?:string|comment)\b/.test(token.type)) return;
     token.state = CodeMirror.innerMode(editor.getMode(), token.state).state;
 
+    var isWord = true;
     // If it's not a 'word-style' token, ignore the token.
     if (!/^[\w$_]*$/.test(token.string)) {
+      isWord = /^\s+$/.test(token.string);
       token = {start: cur.ch, end: cur.ch, string: "", state: token.state,
                type: token.string == "." ? "property" : null};
     } else if (token.end > cur.ch) {
       token.end = cur.ch;
       token.string = token.string.slice(0, cur.ch - token.start);
-    }
+    }    
 
     var topScope = token.state.parsingStack[token.state.parsingStack.length-1];
     if (!token.state.waitFilter && !token.state.waitPipe) {
@@ -102,6 +104,12 @@
     }
 
     var result = [];
+
+    if (!isWord) {
+      return {list: result,
+        from: Pos(cur.line, token.start),
+        to: Pos(cur.line, token.end)};
+    }
 
     if (topScope === "tag" && !context.length) {
       // suggest keywords here
