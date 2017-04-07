@@ -69,15 +69,15 @@
     }
   }
 
-  CodeMirror.defineMode("liquidmixed", function (config, parserConfig) {
+  CodeMirror.defineMode("carbon", function (config, parserConfig) {
     var htmlMode = CodeMirror.getMode(config, {
-      name: "liquidxml",
+      name: "carbonxml",
       htmlMode: true,
       multilineTagIndentFactor: parserConfig.multilineTagIndentFactor,
       multilineTagIndentPastTag: parserConfig.multilineTagIndentPastTag
     });
 
-    var liquidModeSpec = CodeMirror.resolveMode("text/x-liquid");
+    var liquidModeSpec = CodeMirror.resolveMode("text/x-carbonliquid");
     var liquidMode = CodeMirror.getMode(config, liquidModeSpec);
     var liquidState;
 
@@ -204,7 +204,7 @@
         return {state: state.localState || state.htmlState, mode: state.localMode || htmlMode};
       }
     };
-  }, "liquidxml", "javascript", "css", "liquid");
+  }, "carbonxml", "javascript", "css", "carbonliquid");
 
-  CodeMirror.defineMIME("text/html", "liquidmixed");
+  CodeMirror.defineMIME("text/html", "carbon");
 });

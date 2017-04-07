@@ -13,7 +13,7 @@
 })(function(CodeMirror) {
   "use strict";
 
-  CodeMirror.defineMode("liquid:inner", function() {
+  CodeMirror.defineMode("carbonliquid", function() {
     var keywords = ["block", "endblock", "for", "endfor", "true", "false", "filter", "endfilter",
                     "loop", "none", "self", "super", "if", "elif", "endif", "as", "else", "import",
                     "with", "endwith", "without", "context", "ifequal", "endifequal", "ifnotequal",
@@ -50,18 +50,43 @@
       // Attempt to identify a variable, template or comment tag respectively
       if (stream.match("{{")) {
         state.tokenize = inVariable;
+        state.parsingStack.push("variable");
         return "tag";
       } else if (stream.match("{%")) {
         state.tokenize = inTag;
+        state.parsingStack.push("tag");
         return "tag";
       } else if (stream.match("{#")) {
         state.tokenize = inComment;
+        state.parsingStack.push("comment");
         return "comment";
       }
 
       // Ignore completely any stream series that do not match the
       // Liquid template opening tags.
       while (stream.next() != null && !stream.match(/\{[{%#]/, false)) {}
+      return null;
+    }
+
+    // we need this function for liquidmixed mode 
+    // this function just peeks the stream and checks if current token is a liquid token
+    // and does not advance the stream
+    // we can't use tokenBase instead because it advances the stream
+    function peekToken(stream, state) {
+      if (stream.match("{{")) {
+        state.tokenize = inVariable;
+        state.parsingStack.push("variable");
+        return "tag";
+      } else if (stream.match("{%")) {
+        state.tokenize = inTag;
+        state.parsingStack.push("tag");
+        return "tag";
+      } else if (stream.match("{#")) {
+        state.tokenize = inComment;
+        state.parsingStack.push("comment");
+        return "comment";
+      }      
+
       return null;
     }
 
@@ -142,8 +167,8 @@
 
       // Highlight filters
       if (state.waitFilter) {
-          state.waitFilter = false;
         if (stream.match(filters)) {
+          state.waitFilter = false;
           return "variable-2";
         }
       }
@@ -182,6 +207,7 @@
         state.waitDot = null;
         state.waitPipe = null;
         state.tokenize = tokenBase;
+        state.parsingStack.pop();
         return "tag";
       }
 
@@ -307,6 +333,7 @@
         } else {
           state.tokenize = tokenBase;
         }
+        state.parsingStack.pop();
         return "tag";
       }
 
@@ -318,7 +345,8 @@
     // Mark everything as comment inside the tag and the tag itself.
     function inComment (stream, state) {
       if (stream.match(/^.*?#\}/)) state.tokenize = tokenBase
-      else stream.skipToEnd()
+      else stream.skipToEnd();
+      state.parsingStack.pop();
       return "comment";
     }
 
@@ -336,7 +364,16 @@
 
     return {
       startState: function () {
-        return {tokenize: tokenBase};
+        return {
+          tokenize: tokenBase,
+          // we need this function for liquidmixed mode 
+          // this function just peeks the stream and checks if current token is a liquid token
+          // and does not advance the stream
+          // we can't use tokenize/tokenBase instead because it advances the stream
+          peekToken: peekToken,
+
+          parsingStack: []
+        };
       },
       token: function (stream, state) {
         return state.tokenize(stream, state);
@@ -346,11 +383,5 @@
     };
   });
 
-  CodeMirror.defineMode("liquid", function(config) {
-    var htmlBase = CodeMirror.getMode(config, "text/html");
-    var liquidInner = CodeMirror.getMode(config, "liquid:inner");
-    return CodeMirror.overlayMode(htmlBase, liquidInner);
-  });
-
-  CodeMirror.defineMIME("text/x-liquid", "liquid");
+  CodeMirror.defineMIME("text/x-carbonliquid", "carbonliquid");
 });

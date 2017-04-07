@@ -55,7 +55,7 @@ var xmlConfig = {
   caseFold: false
 }
 
-CodeMirror.defineMode("liquidxml", function(editorConf, config_) {
+CodeMirror.defineMode("carbonxml", function(editorConf, config_) {
   var indentUnit = editorConf.indentUnit
   var config = {}
   var defaults = config_.htmlMode ? htmlConfig : xmlConfig
@@ -380,8 +380,8 @@ CodeMirror.defineMode("liquidxml", function(editorConf, config_) {
     blockCommentStart: "<!--",
     blockCommentEnd: "-->",
 
-    configuration: config.htmlMode ? "html" : "liquidxml",
-    helperType: config.htmlMode ? "html" : "liquidxml",
+    configuration: config.htmlMode ? "html" : "carbonxml",
+    helperType: config.htmlMode ? "html" : "carbonxml",
 
     skipAttribute: function(state) {
       if (state.state == attrValueState)
@@ -390,10 +390,10 @@ CodeMirror.defineMode("liquidxml", function(editorConf, config_) {
   };
 });
 
-CodeMirror.defineMIME("text/xml", "liquidxml");
-CodeMirror.defineMIME("application/xml", "liquidxml");
+CodeMirror.defineMIME("text/carbonxml", "carbonxml");
+CodeMirror.defineMIME("application/carbonxml", "carbonxml");
 // debugger;
 if (!CodeMirror.mimeModes.hasOwnProperty("text/html"))
-  CodeMirror.defineMIME("text/html", {name: "liquidxml", htmlMode: true});
+  CodeMirror.defineMIME("text/html", {name: "carbonxml", htmlMode: true});
 
 });

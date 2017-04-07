@@ -148,5 +148,5 @@
   function liquidHint(editor, options) {
     return liquidHintFn(editor, liquidKeywords, getTokenFn, options);
   };
-  CodeMirror.registerHelper("hint", "liquid", liquidHint);
+  CodeMirror.registerHelper("hint", "carbonliquid", liquidHint);
 });

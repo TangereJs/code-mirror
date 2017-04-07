@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>code-mirror</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../at-theme/at-theme.html" />
+  <link rel="import" href="code-mirror.html" />
+  <style>
+    body {
+      margin: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    code-mirror {
+      height: 50%;
+      width: 100%;
+    }
+  </style>
+
+</head>
+
+<body>
+  <h2>This is demo for code-mirror</h2>
+  <div class="horizontal layout">
+    <div class="flex-4"></div>
+    <div class="flex-4">
+      <code-mirror id="codeMirror" max-lines="0" required="true" label="single" mode="carbon" code-mirror">
+      </code-mirror>      
+    </div>
+    <div class="flex-4"></div>
+  </div>
+
+  <script>
+    document.addEventListener('WebComponentsReady', function () {
+      var codeMirror = document.getElementById('codeMirror');
+      //      console.log(codeMirror);
+
+      var liquidMixedStr = '<div>\n' + 
+        '    {% for item in items %}\n' + 
+        '</div>\n' +
+        '<style>\n' + 
+        '  body {\n' +
+        '    background: red;\n' + 
+        '  }\n' + 
+        '</style>\n'
+        ;
+
+      var pureHtmlStr = '<div class="pera"></div>';
+      var imgHtmlStr = '<img/>';
+      var pureLiquid = '{% for item in items %}\n' + 
+      '{{ ivan|capfirst }}\n';
+      
+      codeMirror.value = liquidMixedStr;
+    });
+  </script>
+</body>
+
+</html>
