@@ -206,5 +206,5 @@
     };
   }, "carbonxml", "javascript", "css", "carbonliquid");
 
-  CodeMirror.defineMIME("text/html", "carbon");
+  CodeMirror.defineMIME("text/carbonhtml", "carbon");
 });

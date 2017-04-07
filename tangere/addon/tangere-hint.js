@@ -449,5 +449,5 @@
     if (options) for (var opt in options) local[opt] = options[opt];
     return CodeMirror.hint.carbonxml(cm, local);
   }
-  CodeMirror.registerHelper("hint", "html", htmlHint);
+  CodeMirror.registerHelper("hint", "carbonhtml", htmlHint);
 });
