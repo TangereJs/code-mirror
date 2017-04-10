@@ -74,19 +74,6 @@
         var atName = before.match(/([^\s\u00a0=<>\"\']+)=$/), atValues;
         if (!atName || !attrs.hasOwnProperty(atName[1]) || !(atValues = attrs[atName[1]])) return;
         if (typeof atValues == 'function') atValues = atValues.call(this, cm); // Functions can be used to supply values for autocomplete widget
-        
-        if (atName[1] === "class") {
-          var classesBefore = token.string.match(/\w+/g);
-          var after = cm.getRange(Pos(cur.line, token.end), Pos(cur.line, 100));
-          var classesAfter = after.match(/\w+/g);
-          if (classesBefore !== null) {
-            existingClasses = classesBefore;
-          }
-          if (classesAfter !== null) {
-            existingClasses = existingClasses.concat(classesAfter);
-          }
-          console.log('existing classes '+ existingClasses);
-        }
 
         if (token.type == "string") {
           prefix = token.string;
@@ -101,24 +88,105 @@
             quote = token.string.charAt(len - 1);
             prefix = token.string.substr(n, len - 2);
           }
-          replaceToken = existingClasses.length ? false : true;
+          replaceToken = true;
+        }
+        
+        if (atName[1] === "class") {
+
+          var tokenString = token.string.trim();
+
+          var after = cm.getRange(Pos(cur.line, token.end), Pos(cur.line, 100));
+          
+          // when class="cls1, cls2 ... clsn" user can
+          // 1. add a leading " char like class=""cls1, cls2 ... clsn"
+          // 2. remove leading " like class=cls1, cls2 ... clsn" and add it back immidiately
+          // we want to detect how many of cls1, cls2 ... clsn are present
+          // if any are present do not show autocomplete
+          var indexOfGreater = after.indexOf(">");
+          var afterSlice = after.slice(0, indexOfGreater);
+          var afterTokensWithEmptyStrings = afterSlice.split(" ");
+          var afterTokens = [];
+
+          for (var i = 0; i < afterTokensWithEmptyStrings.length; i++) {
+            var item = afterTokensWithEmptyStrings[i].trim();
+
+            if (item.indexOf("=") > -1) { break; }
+
+            if (item !== "" && item[item.length-1] !== "\"") {
+              afterTokens.push(item);
+            }
+
+            if (item[item.length-1] === "\"") {
+              var item = item.slice(0, item.length-1);
+              afterTokens.push(item);
+              break;
+            }              
+          }
+
+          if (tokenString === "=") {
+            if (afterTokens.length) {
+              result = [];
+            } else {
+              // suggest all classes with quotes
+              for (var i = 0; i < atValues.length; ++i) {
+                result.push("\"" + atValues[i] + "\"");
+              }              
+            }
+
+            replaceToken = false;
+          } else if (tokenString === "\"") {
+
+            if (afterTokens.length) {
+              result = [];
+            } else {
+              // suggest all classes with ending quote
+              for (var i = 0; i < atValues.length; ++i) {
+                result.push(atValues[i] + "\"");
+              }
+            }
+
+            replaceToken = false;
+          } else if (tokenString[0] === "\"" && tokenString[tokenString.length-1] !== "\"") {
+            console.log('token string ' + tokenString);
+            console.debug("before " + before);
+            console.debug("after " + after);
+            console.debug('after tokens' + JSON.stringify(afterTokens));
+
+            var tokenString = tokenString.slice(1, tokenString.length);
+            var classNamesBefore = tokenString.split(" ");
+
+            // TODO use classNamesBefore and afterTokens to filter available class names
+
+            debugger;
+          }
+
+          var classesBefore = token.string.match(/\w+/g);
+          var classesAfter = null;
+          
+          if (token.string !== "=") {
+            var after = cm.getRange(Pos(cur.line, token.end), Pos(cur.line, 100));
+            classesAfter = after.match(/[\s]*[\w]+[\"]$/g);
+          }
+
+          if (classesBefore !== null) {
+            existingClasses = classesBefore;
+          }
+          if (classesAfter !== null) {
+            existingClasses = existingClasses.concat(classesAfter);
+          }
+          // console.log('existing classes '+ existingClasses);
+          replaceToken = false;
         }
 
         existingClasses = existingClasses.join(" ");
         quote = existingClasses === "" ? "\"" : "";
         var intermediateResult = [];
-        for (var i = 0; i < atValues.length; ++i) {//if ()
-          var currentValue = atValues[i];
-
-          if (existingClasses.indexOf(currentValue) == -1) {
-            intermediateResult.push(quote + currentValue + quote);
-          }
-        }
+        
 
         if (token) {
           var compareValue = token.string;
           if (token.string === "=" || token.string ==="\"") {
-            compareValue="";
+            compareValue = "";
           }
           var tokenWordCount = token.string.match(/\w+/g);
           if (tokenWordCount) {
@@ -131,7 +199,7 @@
 
           for (var j1=0; j1 < intermediateResult.length; ++j1) {          
             if (intermediateResult[j1].indexOf(compareValue) > -1){
-              result.push(intermediateResult[j1]);
+              // result.push(intermediateResult[j1]);
             }
           }
           
