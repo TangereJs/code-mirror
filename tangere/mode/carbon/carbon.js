@@ -154,27 +154,14 @@
     var currentParsingModeFn = null;
 
     function html(stream, state) {
-      // 
-      console.log('stream.string ' + stream.string);
-      console.log('stream.peek ' + stream.peek());
-
-      // we want to eat all whitespace
 
       // we test the peek of the stream to test if we can match start of html or liquid
       var isStartOfHtml = stream.match('<', false, true);
-      console.debug('is start of html ' + isStartOfHtml);
 
       var isStartOfLiquid = 
         stream.match('{%', false, true) || 
         stream.match('{{', false, true) || 
         stream.match('{#', false, true);
-      console.debug('is start of liquid ' + isStartOfLiquid);
-
-      var isEndOfLiqud = 
-        stream.match('%}', false, true) || 
-        stream.match('}}', false, true) || 
-        stream.match('#}', false, true);
-      console.debug('is end of liquid ' + isEndOfLiqud);
 
       var style = null;
 
