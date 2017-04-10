@@ -88,29 +88,11 @@
     if (configScript) for (var i = configScript.length - 1; i >= 0; i--)
       tags.script.unshift(["type", configScript[i].matches, configScript[i].mode])
 
-    function html(stream, state) {
-      if (!state.parsingStack) { state.parsingStack = []; }
-      var style = htmlMode.token(stream, state.htmlState), tag = /\btag\b/.test(style), tagName 
-      
-
-      if (style !== null) {
-        state.parsingStack.push(style);
-
-        if (style === "tag bracket") {
-          var openBracketFound = false;
-          var count = 1;
-          for (var i = state.parsingStack.length - 2; i >= 0 && !openBracketFound; i--) {
-            var head = state.parsingStack[i];
-            openBracketFound = style === head;
-            count += 1;
-          }
-          if (openBracketFound) {
-            for (var i = 0; i < count; i++) {
-              state.parsingStack.pop();
-            }
-          }
-        }
-      }
+    
+    function parseInHtmlMode(stream, state) {
+      var style = htmlMode.token(stream, state.htmlState);
+      var tag = /\btag\b/.test(style); 
+      var tagName;
 
       if (tag && !/[<>\s\/]/.test(stream.current()) &&
           (tagName = state.htmlState.tagName && state.htmlState.tagName.toLowerCase()) &&
@@ -126,7 +108,7 @@
           if (stream.match(endTagA, false)) {
             state.token = html;
             state.localState = state.localMode = null;
-            state.parsingStack = [];
+            // state.parsingStack = [];
             return null;
           }
           return maybeBackup(stream, endTag, state.localMode.token(stream, state.localState));
@@ -136,38 +118,86 @@
       } else if (state.inTag) {
         state.inTag += stream.current()
         if (stream.eol()) state.inTag += " "
-      } else if (style === null) {
-        liquidState = liquidMode.startState();
-        if (!liquidState.parsingStack) { liquidState.parsingStack = []; }
-        // we peeks the stream and checks if current token is a liquid token
-        style = liquidState.peekToken(stream, liquidState);
-        if (style !== null && ["tag", "variable"].indexOf(style) > -1) {
-          state.localMode = liquidMode;
-          state.localState = liquidState;
-          state.token = function(stream, state) {
-            var style = liquidState.tokenize(stream, state.localState);
-            if (!state.localState.parsingStack.length) {
-              state.localState.parsingStack.pop();
-              state.localMode = state.localState = null;
-              liquidState = liquidMode.startState();
-              state.token = html;
-            }
-            return style;
-          }       
-        } else if (!state.inTag && !state.parsingStack.length) {
-          // eat whitespace          
-          stream.eatSpace();
+      }
 
-          // extract first non whitespace character and discard it
-          while (!stream.eol() && !/[\s\u00a0]/.test(stream.peek())) {
+      return style;
+    }
+
+    function parseInLiquidMode(stream, state) {
+      var liquidState = liquidMode.startState();
+      // we peeks the stream and checks if current token is a liquid token
+      var style = liquidState.peekToken(stream, liquidState);
+      
+      if (style !== null && ["tag", "variable", "comment"].indexOf(style) > -1) {
+        state.localMode = liquidMode;
+        state.localState = liquidState;
+        state.token = function(stream, state) {
+          var style = liquidState.tokenize(stream, state.localState);
+          if (!state.localState.parsingStack.length) {
+            state.localState.parsingStack.pop();
+            state.localMode = state.localState = null;
+            liquidState = liquidMode.startState();
+            state.token = html;
+            currentParsingModeFn = null;
+          }
+          return style;
+        }       
+      } else {
+        if(!stream.eatSpace()){
+          stream.next();
+        }
+      }
+
+      return style;
+    }
+
+    var currentParsingModeFn = null;
+
+    function html(stream, state) {
+      // 
+      console.log('stream.string ' + stream.string);
+      console.log('stream.peek ' + stream.peek());
+
+      // we want to eat all whitespace
+
+      // we test the peek of the stream to test if we can match start of html or liquid
+      var isStartOfHtml = stream.match('<', false, true);
+      console.debug('is start of html ' + isStartOfHtml);
+
+      var isStartOfLiquid = 
+        stream.match('{%', false, true) || 
+        stream.match('{{', false, true) || 
+        stream.match('{#', false, true);
+      console.debug('is start of liquid ' + isStartOfLiquid);
+
+      var isEndOfLiqud = 
+        stream.match('%}', false, true) || 
+        stream.match('}}', false, true) || 
+        stream.match('#}', false, true);
+      console.debug('is end of liquid ' + isEndOfLiqud);
+
+      var style = null;
+
+      if (currentParsingModeFn !== null && !isStartOfHtml && !isStartOfLiquid) {
+        style = currentParsingModeFn(stream, state);
+      } else {
+        if (isStartOfHtml) {
+          currentParsingModeFn = parseInHtmlMode;
+          style = currentParsingModeFn(stream, state);
+        } else if (isStartOfLiquid) {
+          currentParsingModeFn = parseInLiquidMode;
+          style = currentParsingModeFn(stream, state);
+        } else {
+          if (!stream.eatSpace()) {
             stream.next();
           }
-
-          // return
-
-          return style;
         }
-      } 
+      }
+
+      if (stream.eol()) {
+        currentParsingModeFn = null;
+      }
+
       return style;
     };
 
