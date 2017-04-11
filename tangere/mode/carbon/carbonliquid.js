@@ -200,6 +200,13 @@
         return "variable";
       }
 
+      // we want to match multiple pipes
+      if (stream.match("|")) {
+        state.waitPipe = false;
+        state.waitFilter = true;
+        return "null";
+      }
+
       // If found closing tag reset
       if (stream.match("}}")) {
         state.waitProperty = null;
