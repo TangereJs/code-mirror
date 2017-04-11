@@ -130,7 +130,7 @@
             } else {
               // suggest all classes with quotes
               for (var i = 0; i < atValues.length; ++i) {
-                result.push("\"" + atValues[i] + "\"");
+                result.push("\"" + atValues[i]);
               }              
             }
 
@@ -142,7 +142,7 @@
             } else {
               // suggest all classes with ending quote
               for (var i = 0; i < atValues.length; ++i) {
-                result.push(atValues[i] + "\"");
+                result.push(atValues[i]);
               }
             }
 
