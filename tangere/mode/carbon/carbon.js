@@ -153,6 +153,10 @@
 
     function html(stream, state) {
 
+      if (stream.start === 0 && stream.pos === 0) {        
+        stream.eatSpace();
+      }
+
       // we test the peek of the stream to test if we can match start of html or liquid
       var isStartOfHtml = stream.match('<', false, true);
 

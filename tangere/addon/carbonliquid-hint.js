@@ -84,6 +84,12 @@
       token.string = token.string.slice(0, cur.ch - token.start);
     }    
 
+    if (!token.state.parsingStack) {
+      return {list: [],
+        from: Pos(cur.line, token.start),
+        to: Pos(cur.line, token.end)};
+    }
+
     var topScope = token.state.parsingStack[token.state.parsingStack.length-1];
     if (!token.state.waitFilter && !token.state.waitPipe) {
       context = [];
