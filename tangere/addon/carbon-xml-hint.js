@@ -131,7 +131,7 @@
               // suggest all classes with quotes
               for (var i = 0; i < atValues.length; ++i) {
                 result.push("\"" + atValues[i]);
-              }              
+              }
             }
 
             replaceToken = false;
@@ -200,6 +200,10 @@
             }
 
             // debugger;
+          }
+        } else {
+          for (var i = 0; i < atValues.length; ++i) {
+            result.push("\"" + atValues[i] + "\"");
           }
         }
       
