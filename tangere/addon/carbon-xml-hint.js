@@ -148,10 +148,6 @@
 
             replaceToken = false;
           } else if (tokenString[0] === "\"" && tokenString[tokenString.length-1] !== "\"") {
-            console.log('token string ' + tokenString);
-            console.debug("before " + before);
-            console.debug("after " + after);
-            console.debug('after tokens' + JSON.stringify(afterTokens));
 
             var tokenString = tokenString.slice(1, tokenString.length);
             var classNamesBefore = tokenString.split(" ");
@@ -202,9 +198,22 @@
             // debugger;
           }
         } else {
-          for (var i = 0; i < atValues.length; ++i) {
-            result.push("\"" + atValues[i] + "\"");
+          // when attribute name is not class and has enum values
+          // just add those values to result
+          var tokenString = token.string.trim();
+          var quoteIndex = tokenString.indexOf("\"");
+           var filterText = "";
+          if (quoteIndex > -1) {
+            filterText = tokenString.slice(quoteIndex+1, tokenString.length);
           }
+
+          var startsWidthRegex = new RegExp("^"+filterText);
+          for (var i = 0; i < atValues.length; ++i) {
+            if (startsWidthRegex.test(atValues[i])) {
+              result.push("\"" + atValues[i] + "\"");              
+            }
+          }
+
         }
       
       } else { // An attribute name
