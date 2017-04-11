@@ -51,12 +51,40 @@
         '</style>\n'
         ;
 
-      var pureHtmlStr = '<div class="pera"></div>';
+        var liquidMixedStr2 = 
+          '<div>asd fadfa sdf asdf asdf</div>\n'+
+          '<div>asdfioasdf </div>\n'+
+          '{% for item in items %}\n'+
+          '\t<span>{{ item|capfirst, pera|escape }}</span>\n'+
+          '\t<span>{{ item|capfirst, mika|escape }}</span>\n'+
+          '{% endfor %}\n'+
+          '<div>\n'+
+            '\t<fieldset>\n'+
+              '\t\t<legend></legend>\n'+
+              '\t\t<ul>{% for item in items %} <li> {{title|capfirst}} </li> {% endfor %}  </ul>\n'+
+            '\t</fieldset>\n'+
+          '</div>\n'+
+          '{# this is a comment section #}\n'+
+          '<ul>\n'+
+            '\t{# this is a comment section #}\n'+
+          '</ul>\n'+
+          '{% for item in items %}\n'+
+          '\t<li>{{ item|capitalize }}</li>\n'+
+          '{% endfor %}';
+
+      var pureHtmlStr = '<div class></div>';
       var imgHtmlStr = '<img/>';
-      var pureLiquid = '{% for item in items %}\n' + 
-      '{{ ivan|capfirst }}\n';
+      var pureLiquid = 
+        '<div></div>\n' + 
+        '{% for item in items %}\n' + 
+        '{{ ivan|capfirst }}\n';
       
-      codeMirror.value = liquidMixedStr;
+      var liquidCommentsRecognized =
+        '{# this is sparta! #}\n' +
+        '{# this is sparta! #}';
+
+
+      codeMirror.value = pureHtmlStr;
     });
   </script>
 </body>

@@ -7,8 +7,8 @@ license that can be found in the LICENSE file.
 <script src="codemirror/mode/xml/xml.js"></script>
 <script src="codemirror/mode/javascript/javascript.js"></script>
 <script src="codemirror/mode/css/css.js"></script>
-<script src="codemirror/mode/vbscript/vbscript.js"></script>
 <script src="codemirror/mode/htmlmixed/htmlmixed.js"></script>
+<script src="codemirror/mode/vbscript/vbscript.js"></script>
 <script src="codemirror/mode/yaml/yaml.js"></script>
 <script src="codemirror/addon/fold/foldcode.js"></script>
 <script src="codemirror/addon/fold/foldgutter.js"></script>
@@ -20,11 +20,51 @@ license that can be found in the LICENSE file.
 <script src="codemirror/addon/mode/overlay.js"></script>
 <script src="codemirror/addon/display/fullscreen.js"></script>
 <script src="codemirror/addon/display/autorefresh.js"></script>
+<script src="codemirror/addon/hint/show-hint.js"></script>
+<script src="codemirror/addon/hint/xml-hint.js"></script>
+<script src="codemirror/addon/hint/css-hint.js"></script>
+<script src="codemirror/addon/hint/javascript-hint.js"></script>
 
+<!-- 
+  tangere/mode/liquid/liquid.js is vanila liquid mode/parser
+  it provides liquid mode overlay over html
+ -->
 <script src="tangere/mode/liquid/liquid.js"></script>
+<!--
+  we do not use this one on purpose because tangere-hint is the html-hint with tangere specific elements included
+-->
+<!-- <script src="codemirror/addon/hint/html-hint.js"></script> -->
+<script src="tangere/addon/tangere-hint.js"></script>
 
-<link rel="stylesheet" type="text/css" href="codemirror/lib/codemirror.css">
-<link rel="stylesheet" type="text/css" href="codemirror/addon/display/fullscreen.css">
-<link rel="stylesheet" type="text/css" href="codemirror/addon/fold/foldgutter.css"> 
+<!--
+  carbon xml is modified codemirror/mode/xml/xml.js parser 
+  we use our custom one because original one is needed in vanila htmlmixed mode
+  and original xml parser doesn't work with liquid mode correctly when autocomplete is required
+ -->
+<script src="tangere/mode/carbonxml/carbonxml.js"></script>
+<!--
+  carbonliquid is a modified vanila liquid mode/parser defined as a pure codemirror mode (so not a html overlay)
+  This is used in carbonmixed mode (html, css, js and liquid) with autocomplete
+ -->
+<script src="tangere/mode/carbon/carbonliquid.js"></script>
+<!-- 
+  carbon is a htmlmixed mode using html, css, js and liquid syntax
+ -->
+<script src="tangere/mode/carbon/carbon.js"></script>
 
-<link rel="stylesheet" type="text/css" href="tangere/styles/carbon.css">
+<!-- 
+  carbon-xml-hint is html autocomplete; required because we have custom class attribute suggestions
+ -->
+<script src="tangere/addon/carbon-xml-hint.js"></script>
+<!-- 
+  carbonliquid-hint is liquid autocomplete
+ -->
+<script src="tangere/addon/carbonliquid-hint.js"></script>
+
+
+<link rel="stylesheet" href="codemirror/lib/codemirror.css">
+<link rel="stylesheet" href="codemirror/addon/display/fullscreen.css">
+<link rel="stylesheet" href="codemirror/addon/fold/foldgutter.css"> 
+<link rel="stylesheet" href="codemirror/addon/hint/show-hint.css">
+
+<link rel="stylesheet" href="tangere/styles/carbon.css">

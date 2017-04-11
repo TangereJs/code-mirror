@@ -314,8 +314,8 @@
     "at-carbon-icon-button": { attrs: {icon: null, alt: null, disabled: false, color: "", "key-event-target": null, "stop-keyboard-event-propagation": false, pressed: false, toggles: false, active: false, "pointer-down": false, "received-focus-from-keyboard": null, "aria-active-attribute": "aria-pressed", focused: false, noink: null} },
     "at-carbon-icon-color": { attrs: {icon: "", color: "blue"} },
     "at-carbon-menu": { attrs: {items: null, value: "", "item-view": "<div>{{title}}</div>"} },
-    "at-carbon-menu-button": { attrs: {position: ["topLeft","topRight","bottomLeft","bottomRight"], items: null, value: ""} },
-    "at-carbon-message": { attrs: {type: "warning", html: ""} },
+    "at-carbon-menu-button": { attrs: {position: ["topLeft","topRight","bottomLeft","bottomRight"], icon: "now:menu", items: null, value: "", "item-view": "<div><at-carbon-icon icon=\"{{icon}}\"></at-carbon-icon>{{title}}</div>", "x-offset": 0, "y-offset": 0, color: ""} },
+    "at-carbon-message": { attrs: {type: ["warning","info","error","success"], html: ""} },
     "at-carbon-moment": { attrs: {"auto-refresh": 0, "auto-refresh-rate": 0, "default-auto-refresh-rate": 60, datetime: "", format: "", formats: [], "from-now": false, language: "", "no-suffix": false, strict: false, "unix-offset": 0, "unix-timestamp": 0, utc: false, ago: false, "interval-id": 0, moment: {}} },
     "at-carbon-pager": { attrs: {page: 1, "page-size": 0, "item-count": 0, hide: false} },
     "at-carbon-popup": { attrs: {halign: "left", valign: "bottom", "force-align": false, spacing: {"top":12,"bottom":12,"left":0,"right":0}} },
@@ -329,9 +329,9 @@
     "at-carbon-tree": { attrs: {data: null, value: null, actions: null} },
     "at-carbon-tree-node": { attrs: {data: null, actions: null} },
     "at-carbon-video": { attrs: {controls: false, autoplay: false, loop: false, src: "", thumbnail: "", preload: false, muted: false, "video-volume": 100, "autohide-controls": 1000, width: null, height: null, "current-time": 0, "aspect-ratio": ["4:3","16:9"]} },
-    "at-chart-core": { attrs: {charttype: "line", gridlines: "none", legendposition: "none", tooltip: "default", c3chart: {}, data: {}} },
-    "at-chart-inline": { attrs: {"chart-type": ["line","pie"], "data-column": "", data: {"columns":[["demo",1,2,3,4,5,5,5,5,5,5,5,5,5,5]]}, "pixels-per-data-point": 5, "color-scheme": "category10", hide: false} },
-    "at-chart-strudel": { attrs: {"color-scheme": "category10", data: {"columns":[["Taken",6],["Planned",2],["Open",2]]}, "model-root": ""} },
+    "at-chart-core": { attrs: {charttype: ["bar","line","pie","donut","spline","step","area","area-spline","default"], gridlines: ["none","y","x","xy"], legendposition: ["none","bottom","right","inset"], tooltip: ["none","default","grouped"], c3chart: {}, data: {}} },
+    "at-chart-inline": { attrs: {"chart-type": ["line","pie"], "data-column": "", data: {"columns":[["demo",1,2,3,4,5,5,5,5,5,5,5,5,5,5]]}, "pixels-per-data-point": 5, "color-scheme": ["category10","category20","category20b","category20c","google10c","google20c"], hide: false} },
+    "at-chart-strudel": { attrs: {"color-scheme": ["category10","category20","category20b","category20c","google10c","google20c"], data: {"columns":[["Taken",6],["Planned",2],["Open",2]]}, "model-root": ""} },
     "at-core-activity": { attrs: {url: "", params: {}, method: "GET", headers: {}, "content-type": "application/x-www-form-urlencoded", body: "", sync: false, "handle-as": "json", "with-credentials": false, "no-credentials": false, indicator: false, auto: false, "disable-authorization": false, verbose: false, loading: null, "last-request": null, "last-response": null, "last-error": null, "active-requests": null} },
     "at-core-busy": { attrs: {type: "spinner"} },
     "at-core-card": { attrs: {removing: true, swipeable: false, "no-curve": true, sort: "", "offset-ratio": 0.2, "width-ratio": 1.2} },
@@ -341,7 +341,7 @@
     "at-core-cardlist": { attrs: {items: null, "item-component": "", "card-width": 320, layout: "card", view: "", indicator: false, "empty-list": "No data found"} },
     "at-core-dashboard-echo": { attrs: {template: "", "model-root": ""} },
     "at-core-dframe": { attrs: {src: "", "device-type": ["iphone5s_silver","iphone6_black","iphone6_silver","ipad_silver","nexus5","macbook"], orientation: ["portrait","landscape"], "max-width": 0, "max-height": 0} },
-    "at-core-dropdown": { attrs: {position: ["topLeft","topRight","bottomLeft","bottomRight"]} },
+    "at-core-dropdown": { attrs: {position: ["topLeft","topRight","bottomLeft","bottomRight"], "x-offset": 0, "y-offset": 0} },
     "at-core-form": { attrs: {schema: {"properties":{}}, data: {}, files: {}, disabled: false, hide: false, layout: ["horizontal","vertical"], "section-mode": ["sections","tabs","auto","mobile"], "active-tab": ""} },
     "at-core-iframe": { attrs: {accesskey: "", contenteditable: false, contextmenu: "", dir: "ltr", draggable: false, hidden: false, lang: "en", spellcheck: false, tabindex: -1, title: "", src: "", sandbox: ["","allow-same-origin","allow-top-navigation","allow-forms","allow-scripts"], width: "100%", height: "100%", frameborder: ["0","1"], "allow-fullscreen": false, scrolling: ["auto","yes","no"]} },
     "at-core-item": { attrs: {value: null, "item-component": "", view: ""} },
@@ -369,9 +369,9 @@
     "at-elements-catalog": { attrs: {catalog: null} },
     "at-form": { attrs: {schema: {}, data: {}, url: "", layout: "vertical"} },
     "at-form-ajax": { attrs: {url: "", "schema-url": "", schema: null, "record-id": "", mode: ["c","u","r"], "post-mode": ["json","formdata"]} },
-    "at-form-array": { attrs: {label: "", "hide-label": false, disabled: false, hide: false, required: false, schema: {"items":{"properties":{"value":{"type":"string","title":"Value"}}}}, value: null, layout: "horizontal", "error-message": "", hint: "", "auto-validate": false} },
+    "at-form-array": { attrs: {label: "", "hide-label": false, disabled: false, hide: false, required: false, schema: {"items":{"properties":{"value":{"type":"string","title":"Value"}}}}, value: null, layout: ["vertical","horizontal"], "error-message": "", hint: "", "auto-validate": false} },
     "at-form-checkbox": { attrs: {label: "", "hide-label": false, disabled: false, hide: false, required: false, value: false, xtype: ["","toggle"], "error-message": "", hint: "", "auto-validate": false} },
-    "at-form-codemirror": { attrs: {label: "", "hide-label": false, disabled: false, hide: false, required: false, "max-chars": 0, value: "", "max-lines": 14, mode: ["htmlmixed","javascript","css","markdown","sql","xml","liquid","application/json","yaml"], theme: ["ambiance","blackboard","carbon","cobalt","eclipse","elegant","erlang-dark","lesser-dark","midnight","monokai","neat","night","rubyblue","solarized","twilight","vibrant-ink","xq-dark","xq-light"], "tab-size": 2, "no-line-numbers": false, "error-message": "", hint: "", "auto-validate": false} },
+    "at-form-codemirror": { attrs: {label: "", "hide-label": false, disabled: false, hide: false, required: false, "max-chars": 0, value: "", "max-lines": 14, mode: ["htmlmixed","carbon","javascript","css","markdown","sql","xml","liquid","application/json","yaml"], theme: ["default","carbon"], "tab-size": 2, "no-line-numbers": false, "error-message": "", hint: "", "auto-validate": false} },
     "at-form-complex": { attrs: {label: "", "hide-label": false, schema: {"properties":{}}, value: {}, disabled: false, hide: false, "error-message": "", hint: "", "auto-validate": false} },
     "at-form-cron": { attrs: {label: "", "hide-label": false, disabled: false, hide: false, required: false, value: "", "error-message": "", hint: "", "auto-validate": false} },
     "at-form-date": { attrs: {label: "", "hide-label": false, disabled: false, hide: false, required: false, format: "", value: "", xtype: ["date","time","datetime"], "error-message": "", hint: "", "auto-validate": false} },
@@ -449,5 +449,5 @@
     if (options) for (var opt in options) local[opt] = options[opt];
     return CodeMirror.hint.carbonxml(cm, local);
   }
-  CodeMirror.registerHelper("hint", "carbonhtml", htmlHint);
+  CodeMirror.registerHelper("hint", "html", htmlHint);
 });

@@ -13,7 +13,11 @@
     }
 
     .CodeMirror-scroll {
-      max-height: 300px;
+      max-height: 300px;      
+    }
+
+    .CodeMirror-fullscreen {
+      z-index: 1009;
     }
     </style>
   </template>
@@ -120,11 +124,8 @@ Polymer({
       self._fireValueChangedEvent(self.value);
       self._isInternalUpdate = false;
     });
-    this._mirrorInstance.on("inputRead", function(instance) {
-      var cur = instance.getCursor();
-      var token = instance.getTokenAt(cur);
-      
-      if (instance.state.completionActive && token.string !== " ") {
+    this._mirrorInstance.on("inputRead", function(instance, changeEvent) {
+      if (instance.state.completionActive && changeEvent.text[0] !== " ") {
         return;
       }
       CodeMirror.commands.autocomplete(instance);

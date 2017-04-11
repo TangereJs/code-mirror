@@ -108,8 +108,6 @@ CodeMirror.defineMode("carbonxml", function(editorConf, config_) {
         ok = stream.eatWhile(/[\w\.\-:]/) && stream.eat(";");
       }
       return ok ? "atom" : "error";
-    } else if (ch == "{") {
-      return null;
     } else {
       stream.eatWhile(/[^&<]/);
       return null;
