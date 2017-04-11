@@ -40,7 +40,7 @@
 
     if (!tag && !inner.state.tagName || tagType) {
       if (tagName)
-        prefix = token.string;
+        prefix = token.string;      
       replaceToken = tagType;
       var cx = inner.state.context, curTag = cx && tags[cx.tagName];
       var childList = cx ? curTag && curTag.children : tags["!top"];
@@ -52,8 +52,9 @@
           if (tags.hasOwnProperty(name) && name != "!top" && name != "!attrs" && (!prefix || name.lastIndexOf(prefix, 0) == 0))
             result.push("<" + name);
       }
-      if (cx && (!prefix || tagType == "close" && cx.tagName.lastIndexOf(prefix, 0) == 0))
+      if (cx && (tagType == "close" || (prefix && cx.tagName.lastIndexOf(prefix, 0) == 0))) {
         result.push("</" + cx.tagName + ">");
+      }
     } else {
       // Attribute completion
       var curTag = tags[inner.state.tagName], attrs = curTag && curTag.attrs;
