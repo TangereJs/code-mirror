@@ -154,55 +154,52 @@
 
             var tokenString = tokenString.slice(1, tokenString.length);
             var classNamesBefore = tokenString.split(" ");
+            var tmpResult = [];
+            for (var i = 0; i < atValues.length; ++i) {
+              tmpResult.push(atValues[i]);
+            }
 
             // TODO use classNamesBefore and afterTokens to filter available class names
+            var isUserInputSpaceChar = token.string[token.string.length-1] === " ";
+            var filterText = "";
+            var classNamesBeforeLength = classNamesBefore.length;
+            if (!isUserInputSpaceChar) {
+              filterText = classNamesBefore[classNamesBefore.length-1];
+              classNamesBeforeLength -= 1;
+            }            
+            
+            for (var i = 0; i < classNamesBeforeLength; i+=1) {
+              var classNameBefore = classNamesBefore[i];
+              var classNameIndex = tmpResult.indexOf(classNameBefore);
+              if (classNameIndex > -1) {
+                tmpResult.splice(classNameIndex, 1);
+              }
+            }
 
-            debugger;
-          }
+            for (var i = 0; i < afterTokens.length; i += 1) {
+              var afterToken = afterTokens[i];
+              var afterTokenIndex = tmpResult.indexOf(afterToken);
+              if (afterTokenIndex > -1) {
+                tmpResult.splice(afterTokenIndex, 1);
+              }
+            }
 
-          var classesBefore = token.string.match(/\w+/g);
-          var classesAfter = null;
-          
-          if (token.string !== "=") {
-            var after = cm.getRange(Pos(cur.line, token.end), Pos(cur.line, 100));
-            classesAfter = after.match(/[\s]*[\w]+[\"]$/g);
-          }
+            var startsWidthRegex = new RegExp("^"+filterText);
+            tmpResult.forEach(function(tmp, index){
+              if (startsWidthRegex.test(tmp)) {
+                result.push(tmp);
+              }
+            });
 
-          if (classesBefore !== null) {
-            existingClasses = classesBefore;
-          }
-          if (classesAfter !== null) {
-            existingClasses = existingClasses.concat(classesAfter);
-          }
-          // console.log('existing classes '+ existingClasses);
-          replaceToken = false;
-        }
-
-        existingClasses = existingClasses.join(" ");
-        quote = existingClasses === "" ? "\"" : "";
-        var intermediateResult = [];
-        
-
-        if (token) {
-          var compareValue = token.string;
-          if (token.string === "=" || token.string ==="\"") {
-            compareValue = "";
-          }
-          var tokenWordCount = token.string.match(/\w+/g);
-          if (tokenWordCount) {
-            if (tokenWordCount.length < 2) {
-              compareValue = "";
+            if (filterText.length) {
+              replaceToken = true;
+              tagStart = token.start + token.string.length - filterText.length;
             } else {
-              compareValue = tokenWordCount[tokenWordCount.length-1];
+              replaceToken = false;
             }
-          }
 
-          for (var j1=0; j1 < intermediateResult.length; ++j1) {          
-            if (intermediateResult[j1].indexOf(compareValue) > -1){
-              // result.push(intermediateResult[j1]);
-            }
+            // debugger;
           }
-          
         }
       
       } else { // An attribute name
