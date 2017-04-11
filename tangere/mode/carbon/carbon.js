@@ -126,19 +126,17 @@
     function parseInLiquidMode(stream, state) {
       var liquidState = liquidMode.startState();
       // we peeks the stream and checks if current token is a liquid token
-      var style = liquidState.peekToken(stream, liquidState);
+      var style = liquidState.tokenize(stream, liquidState);
       
       if (style !== null && ["tag", "variable", "comment"].indexOf(style) > -1) {
         state.localMode = liquidMode;
         state.localState = liquidState;
         state.token = function(stream, state) {
-          var style = liquidState.tokenize(stream, state.localState);
+          var style = state.localState.tokenize(stream, state.localState);
           if (!state.localState.parsingStack.length) {
-            state.localState.parsingStack.pop();
-            state.localMode = state.localState = null;
-            liquidState = liquidMode.startState();
-            state.token = html;
             currentParsingModeFn = null;
+            state.localMode = state.localState = null;
+            state.token = html;
           }
           return style;
         }       

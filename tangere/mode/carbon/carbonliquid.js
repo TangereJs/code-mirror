@@ -331,9 +331,9 @@
           state.blockCommentTag = false;  // Release the "lock"
           state.tokenize = inBlockComment;
         } else {
+          state.parsingStack.pop();
           state.tokenize = tokenBase;
         }
-        state.parsingStack.pop();
         return "tag";
       }
 
