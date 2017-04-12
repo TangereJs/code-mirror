@@ -115,7 +115,7 @@
       // suggest filters here
       liquidFilters.forEach(function(filter, index) {
         if (startsWidthRegex.test(filter)) {
-          result.push(filter);
+          result.push(" " + filter + " ");
         }
       });
     } else if (topScope === "variable" && !suggestFilter) {
@@ -124,7 +124,7 @@
       // suggest filters here
       liquidFilters.forEach(function(filter, index) {
         if (startsWidthRegex.test(filter)) {
-          result.push(filter);
+          result.push(" " + filter + " ");
         }
       });
     }
