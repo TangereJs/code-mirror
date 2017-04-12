@@ -65,8 +65,6 @@
     return key1 > key2 ? 1 : -1;
   });
 
-  var context = [];
-
   function liquidHintFn(editor, keywords, getToken, options) {
     // Find the token at the cursor
     var cur = editor.getCursor(), token = getToken(editor, cur);    
@@ -91,13 +89,7 @@
     }
 
     var topScope = token.state.parsingStack[token.state.parsingStack.length-1];
-    if (!token.state.waitFilter && !token.state.waitPipe) {
-      context = [];
-    // } else if (token.state.waitPipe && !token.state.waitFilter) {
-    //   context = []; //.push('startfilter');
-    } else if (token.state.waitFilter && !token.state.waitPipe) {
-      context.push('startfilter');
-    }
+    var suggestFilter = token.state.waitFilter;
 
     var tprop = token;
     // If it is a property, find out what it is a property of.
@@ -111,33 +103,28 @@
 
     var result = [];
 
-    if (!isWord) {
-      return {list: result,
-        from: Pos(cur.line, token.start),
-        to: Pos(cur.line, token.end)};
-    }
-
-    if (topScope === "tag" && !context.length) {
+    var startsWidthRegex = new RegExp("^"+token.string);
+    if (topScope === "tag" && !suggestFilter) {
       // suggest keywords here
       liquidKeywords.forEach(function(keyword, index) {
-        if (keyword.indexOf(token.string) == 0) {
+        if (startsWidthRegex.test(keyword)) {
           result.push(keyword);
         }
       });
-    } else if (topScope === "tag" && context.length) {
+    } else if (topScope === "tag" && suggestFilter) {
       // suggest filters here
       liquidFilters.forEach(function(filter, index) {
-        if (filter.indexOf(token.string) == 0) {
-          result.push(filter);
+        if (startsWidthRegex.test(filter)) {
+          result.push(" " + filter + " ");
         }
       });
-    } else if (topScope === "variable" && !context.length) {
+    } else if (topScope === "variable" && !suggestFilter) {
       // suggest variables here
-    } else if (topScope === "variable" && context.length) {
+    } else if (topScope === "variable" && suggestFilter) {
       // suggest filters here
       liquidFilters.forEach(function(filter, index) {
-        if (filter.indexOf(token.string) == 0) {
-          result.push(filter);
+        if (startsWidthRegex.test(filter)) {
+          result.push(" " + filter + " ");
         }
       });
     }
