@@ -65,6 +65,56 @@
     return key1 > key2 ? 1 : -1;
   });
 
+  function CreateKeywordCompletion(name, description) {
+    var _name = name;
+    var _description = description;
+    
+    return {
+      text: name,
+      render: function(parentElement, data, current) {
+        var div = document.createElement('div');
+        div.classList.add('liquid-keyword');
+
+        var span = document.createElement('span');
+        span.classList.add('liquid-keyword-name');
+        span.textContent = _name;
+        div.appendChild(span);
+
+        span = document.createElement('span');
+        span.textContent = _description;
+        span.classList.add('liquid-keyword-description');
+        div.appendChild(span);
+
+        parentElement.appendChild(div);
+      }
+    }
+  }
+
+  function CreateFilterCompletion(name, description) {
+    var _name = name;
+    var _description = description;
+
+    return {
+      text: " " + name + " ",
+      render: function(parentElement, data, current) {
+        var div = document.createElement('div');
+        div.classList.add('liquid-filter');
+        
+        var span = document.createElement('span');
+        span.classList.add('liquid-filter-name');
+        span.textContent = _name;
+        div.appendChild(span);
+
+        span = document.createElement('span');
+        span.textContent = _description;
+        span.classList.add('liquid-filter-description');
+        div.appendChild(span);
+
+        parentElement.appendChild(div);
+      }
+    }
+  }  
+
   function liquidHintFn(editor, keywords, getToken, options) {
     // Find the token at the cursor
     var cur = editor.getCursor(), token = getToken(editor, cur);    
@@ -108,14 +158,14 @@
       // suggest keywords here
       liquidKeywords.forEach(function(keyword, index) {
         if (startsWidthRegex.test(keyword)) {
-          result.push(keyword);
+          result.push(CreateKeywordCompletion(keyword, "keyword"));
         }
       });
     } else if (topScope === "tag" && suggestFilter) {
       // suggest filters here
       liquidFilters.forEach(function(filter, index) {
         if (startsWidthRegex.test(filter)) {
-          result.push(" " + filter + " ");
+          result.push(CreateFilterCompletion(filter, "filter"));
         }
       });
     } else if (topScope === "variable" && !suggestFilter) {
@@ -124,7 +174,7 @@
       // suggest filters here
       liquidFilters.forEach(function(filter, index) {
         if (startsWidthRegex.test(filter)) {
-          result.push(" " + filter + " ");
+          result.push(CreateFilterCompletion(filter, "filter"));
         }
       });
     }

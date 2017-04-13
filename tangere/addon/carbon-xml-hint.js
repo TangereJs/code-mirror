@@ -49,8 +49,9 @@
           result.push("<" + childList[i]);
       } else if (tagType && tagType != "close") {
         for (var name in tags)
-          if (tags.hasOwnProperty(name) && name != "!top" && name != "!attrs" && (!prefix || name.lastIndexOf(prefix, 0) == 0))
+          if (tags.hasOwnProperty(name) && name != "!top" && name != "!attrs" && (!prefix || name.lastIndexOf(prefix, 0) == 0)) {
             result.push("<" + name);
+          }
       }
       if (cx && (tagType == "close" || (prefix && cx.tagName.lastIndexOf(prefix, 0) == 0))) {
         result.push("</" + cx.tagName + ">");
@@ -75,6 +76,11 @@
         var atName = before.match(/([^\s\u00a0=<>\"\']+)=$/), atValues;
         if (!atName || !attrs.hasOwnProperty(atName[1]) || !(atValues = attrs[atName[1]])) return;
         if (typeof atValues == 'function') atValues = atValues.call(this, cm); // Functions can be used to supply values for autocomplete widget
+
+        if (typeof atValues == 'string') atValues = [ atValues ];
+        if (atValues.isTangereAttribute !== undefined && atValues.value !== null) {
+          atValues = atValues.value;
+        }
 
         if (token.type == "string") {
           prefix = token.string;
@@ -221,8 +227,14 @@
           prefix = token.string;
           replaceToken = true;
         }
-        for (var attr in attrs) if (attrs.hasOwnProperty(attr) && (!prefix || attr.lastIndexOf(prefix, 0) == 0))
-          result.push(attr);
+        for (var attr in attrs) if (attrs.hasOwnProperty(attr) && (!prefix || attr.lastIndexOf(prefix, 0) == 0)) {
+          var attrDef = attrs[attr];
+          if (attrDef != null && attrDef.isTangereAttribute) {
+            result.push(CreateAttributeHint(attr, 'attribute', 'lorem ipsum'));
+          } else {
+            result.push(attr);
+          }
+        }
       }
     }
     return {
@@ -230,6 +242,31 @@
       from: replaceToken ? Pos(cur.line, tagStart == null ? token.start : tagStart) : cur,
       to: replaceToken ? Pos(cur.line, token.end) : cur
     };
+  }
+
+  var attributeHintTemplate = '<div class="tangere-attribute-hint">'+
+    '<div>'+
+      '<div class="attribute-name">{{name}}</div>'+
+      '<div class="attribute-type">{{type}}</div>'+
+      '<div class="clear-float"></div>'+
+    '</div>'+
+    '<div class="attribute-description">{{description}}</div>'+
+  '</div>';
+
+  function CreateAttributeHint(name, type, description) {
+    var _name = name;
+    var _type = type;
+    var _description = description;
+
+    return {
+      text: name,
+      render: function(parentElement, data, current) {
+        var result = attributeHintTemplate.replace(/{{name}}/, _name);
+        result = result.replace(/{{type}}/, _type);
+        result = result.replace(/{{description}}/, _description);
+        parentElement.innerHTML  = result;
+      }
+    }
   }
 
   CodeMirror.registerHelper("hint", "carbonxml", getHints);

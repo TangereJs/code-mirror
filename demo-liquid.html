@@ -68,23 +68,34 @@
           '<ul>\n'+
             '\t{# this is a comment section #}\n'+
           '</ul>\n'+
+          '{% comment %}\n' +
           '{% for item in items %}\n'+
           '\t<li>{{ item|capitalize }}</li>\n'+
-          '{% endfor %}';
+          '{% endfor %}\n' + 
+          '{% endcomment %}\n';
 
       var pureHtmlStr = '<div class></div>';
       var imgHtmlStr = '<img/>';
       var pureLiquid = 
+        '{% comment %}\n' +
         '<div></div>\n' + 
         '{% for item in items %}\n' + 
-        '{{ ivan|capfirst }}\n';
+        '{{ ivan|capfirst }}\n' +
+        '{% endcomment %}\n';
       
+      var pureLiquid2 =         
+        '    <span>{{ ivan|capfirst }}</span>\n';
+      var pureLiquid3 ='{{ ivan }}\n';
+
       var liquidCommentsRecognized =
         '{# this is sparta! #}\n' +
         '{# this is sparta! #}';
 
 
-      codeMirror.value = pureHtmlStr;
+        var atElementsHtml = 
+        '<at-carbon-message type ></at-carbon-message>\n';
+
+      codeMirror.value = atElementsHtml;
     });
   </script>
 </body>
