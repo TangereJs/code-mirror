@@ -76,6 +76,8 @@
         if (!atName || !attrs.hasOwnProperty(atName[1]) || !(atValues = attrs[atName[1]])) return;
         if (typeof atValues == 'function') atValues = atValues.call(this, cm); // Functions can be used to supply values for autocomplete widget
 
+        if (typeof atValues == 'string') atValues = [ atValues ];
+
         if (token.type == "string") {
           prefix = token.string;
           var n = 0;
