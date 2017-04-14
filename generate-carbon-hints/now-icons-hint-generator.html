@@ -1,0 +1,38 @@
+<link rel="import" href="../tangere/tangere.html" />
+<link rel="import" href="at-carbon-icon.html">
+
+<dom-module id="now-icons-hint-generator">
+  <style>
+   :host {
+    display: block;
+    box-sizing: border-box;
+  }
+
+  .now-icons {
+    width: 100%;
+    height: 200px;
+  }
+  </style>
+  <template>
+    <iron-meta id="ironMeta" type="iconset" list="{{iconsets}}"></iron-meta>
+    <div>
+      <h3>Now icons</h3>
+      <h4>Copy contents of the textarea bellow into code-mirror/tangere/addon/tangere-hint.js, into nowIcons variable</h4>
+    </div>
+    <div>
+      <textarea id="nowIcons" class="now-icons" disabled></textarea>
+    </div>
+  </template>
+</dom-module>
+<script>
+Polymer({
+  is: "now-icons-hint-generator",
+  properties: {
+
+  },
+  ready: function() {
+    var iconNames = this.$.ironMeta.list[0].getIconNames();
+    this.$.nowIcons.value = JSON.stringify(iconNames);
+  }
+});
+</script>

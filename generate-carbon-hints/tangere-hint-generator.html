@@ -1,0 +1,145 @@
+<link rel="import" href="../../tangere/tangere.html" />
+<link rel="import" href="../../at-elements/at-elements.html" />
+<link rel="import" href="../../at-doc-parser/at-doc-parser.html" />
+
+<dom-module id="tangere-hint-generator">
+  <style>
+   :host {
+    display: block;
+    box-sizing: border-box;
+  }
+
+  .catalog-text {
+    width: 100%;
+  }
+  </style>
+  <template>
+    <div>
+      <h3>Tangere hints</h3>
+      <h4>Copy paste the contents of the textarea into code-mirror/tangere/addon/tangere-hint.js, into data variable</h4>
+    </div>
+    <div>
+      <textarea id="catalogText" class="catalog-text" disabled>{{catalogText}}</textarea>
+    </div>
+  </template>
+  <script>
+  'use strict';
+  Polymer({
+    is: 'tangere-hint-generator',
+    properties: {
+      catalog: {
+        type: Array,
+        value: function() {
+          return [];
+        },
+        notify: true
+      },
+      catalogText: {
+        type: String,
+        value: "lorem ipsum"
+      }
+    },
+    ready: function() {
+      var result = [];
+      var currentGroup;
+      var self = this;
+      var registrations = Polymer.telemetry.registrations;
+      var elementsToProcess = [];
+      var processedElementCount = 0;
+
+      function importElementText(elementName, valueChangedCallback, context) {
+        var docParser = document.createElement('at-doc-parser');
+        docParser.addEventListener('value-changed', valueChangedCallback.bind(context));
+        var elementUrl = '/components/' + elementName + '/' + elementName + '.html';
+        docParser.url = elementUrl;
+      }
+
+      function handleValueChanged(event) {
+        processedElementCount += 1;
+        var data = event.detail.value[0];
+        result.push(data);
+        // console.log('event.detail ' + JSON.stringify(data, null, " "));
+        // console.log('Processed ' + processedElementCount + ' of ' + elementsToProcess.length);
+        if (processedElementCount === elementsToProcess.length) {
+          console.log('end of processing');
+
+          result.sort(function(item1, item2) {
+            if (item1.name > item2.name) {
+              return 1;
+            } else {
+              return -1;
+            }
+          });
+
+          var catalogText = [];
+
+          result.forEach(function(item, index) {
+            var tmp = "\"" + item.name + "\": { attrs: " + self._computeAttributesArrayString(item.properties) + " }";
+            catalogText.push(tmp)
+          });
+
+          self.$.catalogText.rows = catalogText.length;
+          self.$.catalogText.value = catalogText.join(",\n");
+        }
+      }
+
+      registrations.forEach(function(registration, index) {
+        var properties;
+        var forResult;
+
+        if (registration.is.startsWith("at-")) {
+          elementsToProcess.push(registration.is);
+        }
+      });
+
+      elementsToProcess.forEach(function(elementName, index) {
+        importElementText(elementName, handleValueChanged, self);
+      });
+    },
+
+    _computeAttributesArrayString: function(properties) {
+      var result = "";
+      var separator = ", "
+
+      result += "{"
+
+      properties.forEach(function(property, index) {
+        var attrName = Polymer.CaseMap.camelToDashCase(property.name);
+        var attrDescriptor = {
+          description: property.description,
+          type: property.type,
+          value: property.possibleValues ? property.possibleValues.split(", ") : null
+        }
+
+        var attrValue = property.default;
+
+        if (attrName.indexOf("-") > -1) {
+          attrName = "\"" + attrName + "\"";
+        }
+
+        result += attrName + ": " + JSON.stringify(attrDescriptor);
+
+        if (index < properties.length - 1) {
+          result += separator;
+        }
+      });
+
+      if (result.endsWith(", ")) {
+        result = result.slice(0, result.length - 2);
+      }
+
+      result += "}";
+
+      return result;
+    },
+
+    _computeComma: function(index) {
+      if (index < this.catalog.length - 1) {
+        return ",";
+      } else {
+        return "";
+      }
+    }
+  });
+  </script>
+</dom-module>
