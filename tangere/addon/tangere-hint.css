@@ -1,5 +1,4 @@
 
-
 /* this is the div element */
 .CodeMirror-hint .liquid-keyword {
 
@@ -74,7 +73,7 @@
  **/
 
 .CodeMirror-hint .tangere-attribute-hint {
-
+  width: 250px;
 }
 
 .CodeMirror-hint .tangere-attribute-hint .attribute-name {
@@ -85,7 +84,7 @@
 
 .CodeMirror-hint .tangere-attribute-hint .attribute-type {
   float: right;
-  width: 100px;
+  width: 150px;
   text-align: right;
 }
 
@@ -95,6 +94,7 @@
 
 .CodeMirror-hint .tangere-attribute-hint .attribute-description {
   display: none;
+  white-space: pre-wrap;
 }
 
 /* when active */
@@ -112,5 +112,5 @@
 }
 
 .CodeMirror-hint.CodeMirror-hint-active .tangere-attribute-hint .attribute-description {
-  display: block;
+  display: block;  
 }

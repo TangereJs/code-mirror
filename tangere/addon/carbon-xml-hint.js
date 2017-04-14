@@ -78,9 +78,6 @@
         if (typeof atValues == 'function') atValues = atValues.call(this, cm); // Functions can be used to supply values for autocomplete widget
 
         if (typeof atValues == 'string') atValues = [ atValues ];
-        if (atValues.isTangereAttribute !== undefined && atValues.value !== null) {
-          atValues = atValues.value;
-        }
 
         if (token.type == "string") {
           prefix = token.string;
@@ -214,9 +211,15 @@
           }
 
           var startsWidthRegex = new RegExp("^"+filterText);
-          for (var i = 0; i < atValues.length; ++i) {
-            if (startsWidthRegex.test(atValues[i])) {
-              result.push("\"" + atValues[i] + "\"");              
+
+          var attributeValues = atValues;
+          if (atValues.value !== undefined && isArray(atValues.value)) {
+            attributeValues = atValues.value;
+          }
+
+          for (var i = 0; i < attributeValues.length; ++i) {
+            if (startsWidthRegex.test(attributeValues[i])) {
+              result.push("\"" + attributeValues[i] + "\"");
             }
           }
 
@@ -229,8 +232,8 @@
         }
         for (var attr in attrs) if (attrs.hasOwnProperty(attr) && (!prefix || attr.lastIndexOf(prefix, 0) == 0)) {
           var attrDef = attrs[attr];
-          if (attrDef != null && attrDef.isTangereAttribute) {
-            result.push(CreateAttributeHint(attr, 'attribute', 'lorem ipsum'));
+          if (attrDef != null && attrDef.description !== undefined) {
+            result.push(CreateAttributeHint(attr, attrDef.type, attrDef.description));
           } else {
             result.push(attr);
           }
@@ -242,6 +245,10 @@
       from: replaceToken ? Pos(cur.line, tagStart == null ? token.start : tagStart) : cur,
       to: replaceToken ? Pos(cur.line, token.end) : cur
     };
+  }
+
+  function isArray(obj) {
+    return Object.prototype.toString.call(obj) === "[object Array]";
   }
 
   var attributeHintTemplate = '<div class="tangere-attribute-hint">'+
