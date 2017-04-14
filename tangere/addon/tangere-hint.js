@@ -19,6 +19,7 @@
   var media = ["all", "screen", "print", "embossed", "braille", "handheld", "print", "projection", "screen", "tty", "tv", "speech",
                "3d-glasses", "resolution [>][<][=] [X]", "device-aspect-ratio: X/Y", "orientation:portrait",
                "orientation:landscape", "device-height: [X]", "device-width: [X]"];
+  var nowIcons = ["now:about","now:about-filled","now:administration","now:alert","now:ambulance","now:announcement","now:app","now:arrow-down","now:arrow-left","now:arrow-right","now:arrow-up","now:assistant","now:audio","now:birthday","now:blank","now:bold","now:calendar","now:cancel","now:cards","now:caret-down","now:caret-left","now:caret-right","now:caret-up","now:chart","now:chart-bar","now:chart-doughnut","now:chart-line","now:chart-pie","now:checkbox","now:checklist","now:checkmark","now:clock","now:code","now:collapse","now:component","now:contact","now:create-new","now:database","now:delete","now:device-laptop","now:device-phone","now:devices","now:device-tablet","now:directions","now:document","now:download","now:edit","now:end","now:error","now:error-filled","now:excel","now:exchange","now:exit","now:expand","now:faq","now:file","now:filter","now:flash","now:folder","now:form","now:gear","now:generic-text","now:group","now:hash","now:heading","now:help","now:home","now:html","now:html-file","now:image-file","now:inbox","now:info","now:info-filled","now:invoice","now:italic","now:key","now:line-horizontal","now:link","now:list-bullets","now:list-numbered","now:manual","now:map","now:markdown","now:marker","now:menu","now:menu2","now:message","now:micro","now:minus","now:minus-filled","now:more","now:msaccess","now:msproject","now:number","now:onenote","now:password","now:pdf","now:phone","now:picture","now:plane","now:play","now:plus","now:plus-filled","now:powerpoint","now:question","now:questions","now:quote","now:redo","now:restart","now:rewind","now:rss","now:search","now:server-cloud","now:share","now:sharepoint","now:shopping-basket","now:sort-down","now:source-code","now:star","now:star-filled","now:start","now:tag","now:toggle","now:trash","now:undo","now:upload","now:user","now:users","now:video","now:video-call","now:visible","now:warning","now:warning-filled","now:weather","now:word","now:wrench"];               
   var s = { attrs: {} }; // Simple tag, reused for a whole lot of tags
 
   var data = {
@@ -309,12 +310,12 @@
     "at-carbon-collapse": { attrs: {"icon-position": ["left","right","right-justified"], title: null, content: null, opened: false} },
     "at-carbon-date-picker": { attrs: {mode: ["single","start-range","end-range"], "start-date": null, "end-date": null} },
     "at-carbon-dialog": { attrs: {"sizing-target": null, "fit-into": null, "no-overlap": null, "position-target": null, "horizontal-align": null, "vertical-align": null, "dynamic-align": null, "horizontal-offset": null, "vertical-offset": null, "auto-fit-on-attach": null, opened: null, canceled: null, "with-backdrop": null, "no-auto-focus": null, "no-cancel-on-esc-key": null, "no-cancel-on-outside-click": null, "closing-reason": null, "restore-focus-on-close": null, "always-on-top": null, modal: null, "animation-config": null, "entry-animation": null, "exit-animation": null} },
-    "at-carbon-empty-state": { attrs: {icon: null, html: null} },
-    "at-carbon-icon": { attrs: {src: null, icon: null, theme: null} },
-    "at-carbon-icon-button": { attrs: {icon: null, alt: null, disabled: null, color: null, "key-event-target": null, "stop-keyboard-event-propagation": null, pressed: null, toggles: null, active: null, "pointer-down": null, "received-focus-from-keyboard": null, "aria-active-attribute": null, focused: null, noink: null} },
-    "at-carbon-icon-color": { attrs: {icon: null, color: null} },
+    "at-carbon-empty-state": { attrs: {icon: nowIcons, html: null} },
+    "at-carbon-icon": { attrs: {src: null, icon: nowIcons, theme: null} },
+    "at-carbon-icon-button": { attrs: {icon: nowIcons, alt: null, disabled: null, color: null, "key-event-target": null, "stop-keyboard-event-propagation": null, pressed: null, toggles: null, active: null, "pointer-down": null, "received-focus-from-keyboard": null, "aria-active-attribute": null, focused: null, noink: null} },
+    "at-carbon-icon-color": { attrs: {icon: nowIcons, color: null} },
     "at-carbon-menu": { attrs: {items: null, value: null, "item-view": null} },
-    "at-carbon-menu-button": { attrs: {position: ["topLeft","topRight","bottomLeft","bottomRight"], icon: null, items: null, value: null, "item-view": null, "x-offset": null, "y-offset": null, color: null} },
+    "at-carbon-menu-button": { attrs: {position: ["topLeft","topRight","bottomLeft","bottomRight"], icon: nowIcons, items: null, value: null, "item-view": null, "x-offset": null, "y-offset": null, color: null} },
     "at-carbon-message": { attrs: {type: ["warning","info","error","success"], html: null} },
     "at-carbon-moment": { attrs: {"auto-refresh": null, "auto-refresh-rate": null, "default-auto-refresh-rate": null, datetime: null, format: null, formats: null, "from-now": null, language: null, "no-suffix": null, strict: null, "unix-offset": null, "unix-timestamp": null, utc: null, ago: null, "interval-id": null, moment: null} },
     "at-carbon-pager": { attrs: {page: null, "page-size": null, "item-count": null, hide: null} },
@@ -354,7 +355,7 @@
     "at-core-propform": { attrs: {"element-instance": null, value: null, mode: ["default","designer"], hide: null, "title-mode": ["title","propertyName"]} },
     "at-core-resize-sensor": { attrs: {} },
     "at-core-router": { attrs: {"default-view": null, "primary-color": null, "default-color": null, caption: null, "enable-back": null, context: null} },
-    "at-core-searchbox": { attrs: {"search-term": null, placeholder: null, language: null, icon: null, "type-write": null} },
+    "at-core-searchbox": { attrs: {"search-term": null, placeholder: null, language: null, icon: nowIcons, "type-write": null} },
     "at-core-signals": { attrs: {} },
     "at-core-sortable": { attrs: {group: null, sort: null, disabled: null, store: null, handle: null, "scroll-sensitivity": null, "scroll-speed": null, "ghost-class": null, "chosen-class": null, ignore: null, filter: null, animation: null, "drop-bubble": null, "dragover-bubble": null, "data-id-attr": null, delay: null, "force-fallback": null, "fallback-class": null, "fallback-on-body": null, draggable: null, scroll: null} },
     "at-core-spinner": { attrs: {display: null, type: null} },
@@ -376,7 +377,7 @@
     "at-form-cron": { attrs: {label: null, "hide-label": null, disabled: null, hide: null, required: null, value: null, "error-message": null, hint: null, "auto-validate": null} },
     "at-form-date": { attrs: {label: null, "hide-label": null, disabled: null, hide: null, required: null, format: null, value: null, xtype: ["date","time","datetime"], "error-message": null, hint: null, "auto-validate": null} },
     "at-form-daterange": { attrs: {label: null, "hide-label": null, disabled: null, hide: null, required: null, format: null, "start-date": null, "end-date": null, value: null, "error-message": null, hint: null, "auto-validate": null} },
-    "at-form-file": { attrs: {label: null, "hide-label": null, disabled: null, hide: null, required: null, value: null, files: null, "min-size": null, "max-size": null, icon: null, accept: null, extensions: null, "max-files": null, "error-message": null, hint: null, "auto-validate": null} },
+    "at-form-file": { attrs: {label: null, "hide-label": null, disabled: null, hide: null, required: null, value: null, files: null, "min-size": null, "max-size": null, icon: nowIcons, accept: null, extensions: null, "max-files": null, "error-message": null, hint: null, "auto-validate": null} },
     "at-form-html": { attrs: {label: null, "hide-label": null, disabled: null, hide: null, required: null, "max-chars": null, value: null, placeholder: null, formats: null, theme: ["snow","bubble"], "ops-mode": null, "toolbar-mode": ["default","full"], "error-message": null, hint: null, "auto-validate": null} },
     "at-form-image": { attrs: {label: null, "hide-label": null, disabled: null, hide: null, required: null, value: null, files: null, "min-size": null, "max-size": null, icon: null, accept: null, extensions: null, "max-files": null, "error-message": null, hint: null, "auto-validate": null} },
     "at-form-input": { attrs: {value: null, "hide-label": null, valid: null, required: null, disabled: null, name: null, type: null, label: null, placeholder: null, hide: null} },
