@@ -124,11 +124,15 @@ Polymer({
       self._fireValueChangedEvent(self.value);
       self._isInternalUpdate = false;
     });
-    this._mirrorInstance.on("inputRead", function(instance, changeEvent) {
+    this._mirrorInstance.on("inputRead", function(instance, changeEvent) {      
       if (instance.state.completionActive && changeEvent.text[0] !== " ") {
         return;
       }
-      CodeMirror.commands.autocomplete(instance);
+
+      // *ij* colon character removed from close characters so that now icons can be suggested correctly
+      CodeMirror.commands.autocomplete(instance, null, {
+        closeCharacters: /[\s()\[\]{};>,]/
+      });
     });
     this._isReady = true;
   },
