@@ -19,6 +19,8 @@
   var media = ["all", "screen", "print", "embossed", "braille", "handheld", "print", "projection", "screen", "tty", "tv", "speech",
                "3d-glasses", "resolution [>][<][=] [X]", "device-aspect-ratio: X/Y", "orientation:portrait",
                "orientation:landscape", "device-height: [X]", "device-width: [X]"];
+  
+  // *ij* to update now icons go to at-carbon-icon/now-icons-array.html and copy paste the JSON string over the existing string
   var nowIcons = ["now:about","now:about-filled","now:administration","now:alert","now:ambulance","now:announcement","now:app","now:arrow-down","now:arrow-left","now:arrow-right","now:arrow-up","now:assistant","now:audio","now:birthday","now:blank","now:bold","now:calendar","now:cancel","now:cards","now:caret-down","now:caret-left","now:caret-right","now:caret-up","now:chart","now:chart-bar","now:chart-doughnut","now:chart-line","now:chart-pie","now:checkbox","now:checklist","now:checkmark","now:clock","now:code","now:collapse","now:component","now:contact","now:create-new","now:database","now:delete","now:device-laptop","now:device-phone","now:devices","now:device-tablet","now:directions","now:document","now:download","now:edit","now:end","now:error","now:error-filled","now:excel","now:exchange","now:exit","now:expand","now:faq","now:file","now:filter","now:flash","now:folder","now:form","now:gear","now:generic-text","now:group","now:hash","now:heading","now:help","now:home","now:html","now:html-file","now:image-file","now:inbox","now:info","now:info-filled","now:invoice","now:italic","now:key","now:line-horizontal","now:link","now:list-bullets","now:list-numbered","now:manual","now:map","now:markdown","now:marker","now:menu","now:menu2","now:message","now:micro","now:minus","now:minus-filled","now:more","now:msaccess","now:msproject","now:number","now:onenote","now:password","now:pdf","now:phone","now:picture","now:plane","now:play","now:plus","now:plus-filled","now:powerpoint","now:question","now:questions","now:quote","now:redo","now:restart","now:rewind","now:rss","now:search","now:server-cloud","now:share","now:sharepoint","now:shopping-basket","now:sort-down","now:source-code","now:star","now:star-filled","now:start","now:tag","now:toggle","now:trash","now:undo","now:upload","now:user","now:users","now:video","now:video-call","now:visible","now:warning","now:warning-filled","now:weather","now:word","now:wrench"];
   var s = { attrs: {} }; // Simple tag, reused for a whole lot of tags
 
@@ -303,6 +305,7 @@
       }
     },
     wbr: s,
+    // *ij* to update at elemenst go to at-elements/index-cm-tag-attr.html and copy paste the items here
     "at-carbon-action-button": { attrs: {disabled: null, xtype: ["submit","cancel"]} },
     "at-carbon-alert": { attrs: {title: null, message: null, "confirm-button": null, "cancel-button": "", opened: null} },
     "at-carbon-button": { attrs: {raised: null, "key-event-target": null, "stop-keyboard-event-propagation": null, pressed: null, toggles: null, active: null, "pointer-down": null, "received-focus-from-keyboard": null, "aria-active-attribute": null, focused: null, disabled: null, elevation: null} },
