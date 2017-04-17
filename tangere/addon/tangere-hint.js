@@ -154,7 +154,7 @@
       obj.attrs[attr] = globalAttrs[attr];
 
     if (obj.attrs.hasOwnProperty('icon')) {
-      obj.attrs['icon'] = nowIcons;
+      obj.attrs.icon.value = nowIcons;
     }
   }
 
