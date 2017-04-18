@@ -13,11 +13,15 @@
   
   var s = { attrs: {} };
   
+  // CodeMirror.tangereHint.htmlSchema is defined in tangere-hint-data.js and imported 
+  // before tangere-hint.js so that this data is available
   var data = CodeMirror.tangereHint.htmlSchema;
 
   var globalAttrs = {
     accesskey: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
-    class: [ "put", "allowed", "classes", "here" ],
+    // CodeMirror.tangereHint.classes is defined in tangere-hint-class-data.js and imported 
+    // before tangere-hint.js so that this data is available
+    class: CodeMirror.tangereHint.classes,
     contenteditable: ["true", "false"],
     contextmenu: null,
     dir: ["ltr", "rtl", "auto"],
@@ -45,6 +49,8 @@
       obj.attrs[attr] = globalAttrs[attr];
 
     if (obj.attrs.hasOwnProperty('icon')) {
+      // CodeMirror.tangereHint.nowIcons is defined in tangere-hint-data.js and imported 
+      // before tangere-hint.js so that this data is available
       obj.attrs.icon.value = CodeMirror.tangereHint.nowIcons;
     }
   }
