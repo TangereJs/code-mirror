@@ -131,9 +131,14 @@
             if (afterTokens.length) {
               result = [];
             } else {
-              // suggest all classes with quotes
+              // suggest all classes with starting quote
               for (var i = 0; i < atValues.length; ++i) {
-                result.push("\"" + atValues[i]);
+                var atValue = atValues[i]; 
+                if (isObject(atValue)) {
+                  result.push(CreateAttributeHint("\"" + atValue.class, "class", atValue.description));
+                } else {
+                  result.push("\"" + atValues[i]);                  
+                }
               }
             }
 
@@ -143,9 +148,14 @@
             if (afterTokens.length) {
               result = [];
             } else {
-              // suggest all classes with ending quote
+              // suggest all classes
               for (var i = 0; i < atValues.length; ++i) {
-                result.push(atValues[i]);
+                var atValue = atValues[i]; 
+                if (isObject(atValue)) {
+                  result.push(CreateAttributeHint("\"" + atValue.class, "class", atValue.description));
+                } else {
+                  result.push("\"" + atValues[i]);                  
+                }
               }
             }
 
@@ -159,7 +169,6 @@
               tmpResult.push(atValues[i]);
             }
 
-            // TODO use classNamesBefore and afterTokens to filter available class names
             var isUserInputSpaceChar = token.string[token.string.length-1] === " ";
             var filterText = "";
             var classNamesBeforeLength = classNamesBefore.length;
@@ -170,7 +179,10 @@
             
             for (var i = 0; i < classNamesBeforeLength; i+=1) {
               var classNameBefore = classNamesBefore[i];
-              var classNameIndex = tmpResult.indexOf(classNameBefore);
+              // var classNameIndex = tmpResult.indexOf(classNameBefore);
+              var classNameIndex =  findIndexOf(tmpResult, function(item, index){
+                return item.class === classNameBefore ? 0 : -1;
+              });
               if (classNameIndex > -1) {
                 tmpResult.splice(classNameIndex, 1);
               }
@@ -178,7 +190,10 @@
 
             for (var i = 0; i < afterTokens.length; i += 1) {
               var afterToken = afterTokens[i];
-              var afterTokenIndex = tmpResult.indexOf(afterToken);
+              //var afterTokenIndex = tmpResult.indexOf(afterToken);
+              var afterTokenIndex = findIndexOf(tmpResult, function(item, index){ 
+                return item.class === afterToken ? 0 : -1;
+              });
               if (afterTokenIndex > -1) {
                 tmpResult.splice(afterTokenIndex, 1);
               }
@@ -186,8 +201,8 @@
 
             var startsWidthRegex = new RegExp("^"+filterText);
             tmpResult.forEach(function(tmp, index){
-              if (startsWidthRegex.test(tmp)) {
-                result.push(tmp);
+              if (startsWidthRegex.test(tmp.class)) {
+                result.push(CreateAttributeHint(tmp.class, "class", tmp.description));
               }
             });
 
@@ -205,7 +220,7 @@
           // just add those values to result
           var tokenString = token.string.trim();
           var quoteIndex = tokenString.indexOf("\"");
-           var filterText = "";
+          var filterText = "";
           if (quoteIndex > -1) {
             filterText = tokenString.slice(quoteIndex+1, tokenString.length);
           }
@@ -251,6 +266,22 @@
     return Object.prototype.toString.call(obj) === "[object Array]";
   }
 
+  function isObject(obj) {
+    return Object.prototype.toString.apply(obj) === "[object Object]";
+  }
+
+  function findIndexOf(array, predicate) {
+    var result = 0;
+
+    for (result = 0; result < array.length; result +=1) {
+      if (predicate.call(null, array[result], result) === 0) {
+        break;
+      }
+    }
+
+    return result;
+  }
+
   var attributeHintTemplate = '<div class="tangere-attribute-hint">'+
     '<div>'+
       '<div class="attribute-name">{{name}}</div>'+
@@ -270,7 +301,7 @@
       render: function(parentElement, data, current) {
         var result = attributeHintTemplate.replace(/{{name}}/, _name);
         result = result.replace(/{{type}}/, _type);
-        result = result.replace(/{{description}}/, _description);
+        result = result.replace(/{{description}}/, _description != null ? _description : "");
         parentElement.innerHTML  = result;
       }
     }
