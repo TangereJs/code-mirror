@@ -307,7 +307,12 @@
 
   var globalAttrs = {
     accesskey: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
-    class: CodeMirror.tangereHint.classes,
+    
+    /* 1. When codemirror is updated to a new version and codemirror/addon/hint/html-hint.js is updated  as a result 
+     * one should copy paste the updated html-hint.js content into this file and change line bellow from
+     * "class": null to "class": CodeMirror.tangereHint.classes
+     */
+    "class": CodeMirror.tangereHint.classes,
     contenteditable: ["true", "false"],
     contextmenu: null,
     dir: ["ltr", "rtl", "auto"],
@@ -343,6 +348,13 @@
   function htmlHint(cm, options) {
     var local = {schemaInfo: data};
     if (options) for (var opt in options) local[opt] = options[opt];
+
+    /* 2. When codemirror is updated to a new version and codemirror/addon/hint/html-hint.js is updated  as a result 
+     * one should copy paste the updated html-hint.js content into this file and change line bellow from
+     * return CodeMirror.hint.xml(cm, local); to 
+     * return CodeMirror.hint.carbonxml(cm, local);
+     * becuase CodeMirror.hint.xml doesn't work as expected with liquid syntax
+     */
     return CodeMirror.hint.carbonxml(cm, local);
   }
   CodeMirror.registerHelper("hint", "html", htmlHint);
