@@ -21,7 +21,7 @@
     accesskey: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
     // CodeMirror.tangereHint.classes is defined in tangere-hint-class-data.js and imported 
     // before tangere-hint.js so that this data is available
-    class: CodeMirror.tangereHint.classes,
+    "class": CodeMirror.tangereHint.classes,
     contenteditable: ["true", "false"],
     contextmenu: null,
     dir: ["ltr", "rtl", "auto"],
@@ -59,7 +59,11 @@
   for (var tag in data) if (data.hasOwnProperty(tag) && data[tag] != s)
     populate(data[tag]);
 
-  CodeMirror.htmlSchema = data;
+
+  Object.keys(data).forEach(function(key, index){ 
+    CodeMirror.htmlSchema[key] = data[key];
+  });
+
   function tangereHint(cm, options) {
     var local = {schemaInfo: data};
     if (options) for (var opt in options) local[opt] = options[opt];
@@ -87,13 +91,25 @@
 
       tangereResult.list.forEach(function(item, index) {
         // *ij*  avoid duplicate entries
-        if (final.list.indexOf(item) === -1) {
+        if (item.text) {
+          if (findIndexOf(final.list, item) === -1) {
+            final.list.push(item);
+          }
+        } else if (final.list.indexOf(item) === -1) {
           final.list.push(item);
         }
       });
     }
 
     return final;
+  }
+
+  function findIndexOf(array, item) {
+    var result = -1;
+    array.forEach(function(arrayItem, index){ 
+      if (arrayItem.text === item.text) { result = index; }
+    });
+    return result;
   }
 
   if (CodeMirror.helpers.hint.hasOwnProperty('html')) {

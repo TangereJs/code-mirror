@@ -39,12 +39,18 @@ license that can be found in the LICENSE file.
 <script src="tangere/addon/tangere-show-hint.js"></script>
 
 <!--
-  we do not use this one on purpose because tangere-hint is the html-hint with tangere specific elements included
+  we use html-hint to provide data as CodeMirror.htmlSchema
 -->
-<!-- <script src="codemirror/addon/hint/html-hint.js"></script> -->
+<script src="codemirror/addon/hint/html-hint.js"></script>
 <script src="tangere/addon/tangere-hint-class-data.js"></script>
 <script src="tangere/addon/tangere-hint-data.js"></script>
+<!--
+  we use html5-hints to add tangere specific classes to CodeMirror.htmlSchema
+-->
 <script src="tangere/addon/html5-hint.js"></script>
+<!--
+  we use tangere-hint to add tangere specific elements to CodeMirror.htmlSchema
+-->
 <script src="tangere/addon/tangere-hint.js"></script>
 
 <!--
