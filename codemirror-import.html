@@ -20,7 +20,7 @@ license that can be found in the LICENSE file.
 <script src="codemirror/addon/mode/overlay.js"></script>
 <script src="codemirror/addon/display/fullscreen.js"></script>
 <script src="codemirror/addon/display/autorefresh.js"></script>
-<script src="codemirror/addon/hint/show-hint.js"></script>
+<!-- <script src="codemirror/addon/hint/show-hint.js"></script> -->
 <script src="codemirror/addon/hint/xml-hint.js"></script>
 <script src="codemirror/addon/hint/css-hint.js"></script>
 <script src="codemirror/addon/hint/javascript-hint.js"></script>
@@ -30,6 +30,14 @@ license that can be found in the LICENSE file.
   it provides liquid mode overlay over html
  -->
 <script src="tangere/mode/liquid/liquid.js"></script>
+
+<!-- 
+  We use our custom version of show-hint because original version has a bug
+  (or designed behavior) which causes hints to now always show after typing
+  equals (=) character
+ -->
+<script src="tangere/addon/tangere-show-hint.js"></script>
+
 <!--
   we do not use this one on purpose because tangere-hint is the html-hint with tangere specific elements included
 -->
