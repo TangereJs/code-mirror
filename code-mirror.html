@@ -30,6 +30,7 @@ Polymer({
     value: {
       type: String,
       value: '',
+      xtype: 'code',
       observer: 'valueChanged'
     },
     mode: {
@@ -70,6 +71,18 @@ Polymer({
       type: Boolean,
       value: false,
       observer: "_hideChanged"
+    },
+
+    /**
+     * if true value-changed event will be fired after each change made in codemirror editor
+     * 
+     * @property changeOnKeypress
+     * @type Boolean
+     * @default false 
+     */
+    changeOnKeypress: {
+      type: Boolean,
+      value: false
     }
   },
   _isReady: false,
@@ -134,6 +147,16 @@ Polymer({
         closeCharacters: /[\s()\[\]{};>,]/
       });
     });
+
+    this._mirrorInstance.on('change', function(instance, change){ 
+      if (self.changeOnKeypress) {
+        self._isInternalUpdate = true;
+        self.value = instance.getValue();
+        self._fireValueChangedEvent(self.value);
+        self._isInternalUpdate = false;
+      }
+    });
+
     this._isReady = true;
   },
   attached: function() {
