@@ -180,6 +180,8 @@ Polymer({
   refresh: function() {
     if (this._isReady) {
       this._mirrorInstance.refresh();
+      // *ij* fix for  maxlines not applied correctly in at-doc-viewer
+      this.maxLinesChanged(this.maxLines, undefined);
     }
   },
   valueChanged: function() {
