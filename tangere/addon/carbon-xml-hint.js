@@ -134,11 +134,7 @@
               // suggest all classes with starting quote
               for (var i = 0; i < atValues.length; ++i) {
                 var atValue = atValues[i]; 
-                if (isObject(atValue)) {
-                  result.push(CreateAttributeHint("\"" + atValue.class, "class", atValue.description));
-                } else {
-                  result.push("\"" + atValues[i]);                  
-                }
+                result.push(CreateClassHint("\"" + atValue, "class"));
               }
             }
 
@@ -151,11 +147,7 @@
               // suggest all classes
               for (var i = 0; i < atValues.length; ++i) {
                 var atValue = atValues[i]; 
-                if (isObject(atValue)) {
-                  result.push(CreateAttributeHint("\"" + atValue.class, "class", atValue.description));
-                } else {
-                  result.push("\"" + atValues[i]);                  
-                }
+                result.push(CreateClassHint(atValue, "class"));
               }
             }
 
@@ -179,9 +171,8 @@
             
             for (var i = 0; i < classNamesBeforeLength; i+=1) {
               var classNameBefore = classNamesBefore[i];
-              // var classNameIndex = tmpResult.indexOf(classNameBefore);
               var classNameIndex =  findIndexOf(tmpResult, function(item, index){
-                return item.class === classNameBefore ? 0 : -1;
+                return getClassName(item) === classNameBefore ? 0 : -1;
               });
               if (classNameIndex > -1) {
                 tmpResult.splice(classNameIndex, 1);
@@ -190,9 +181,8 @@
 
             for (var i = 0; i < afterTokens.length; i += 1) {
               var afterToken = afterTokens[i];
-              //var afterTokenIndex = tmpResult.indexOf(afterToken);
               var afterTokenIndex = findIndexOf(tmpResult, function(item, index){ 
-                return item.class === afterToken ? 0 : -1;
+                return getClassName(item) === afterToken ? 0 : -1;
               });
               if (afterTokenIndex > -1) {
                 tmpResult.splice(afterTokenIndex, 1);
@@ -201,8 +191,8 @@
 
             var startsWidthRegex = new RegExp("^"+filterText);
             tmpResult.forEach(function(tmp, index){
-              if (startsWidthRegex.test(tmp.class)) {
-                result.push(CreateAttributeHint(tmp.class, "class", tmp.description));
+              if (startsWidthRegex.test(getClassName(tmp))) {
+                result.push(CreateClassHint(tmp, "class"));
               }
             });
 
@@ -305,6 +295,43 @@
         parentElement.innerHTML  = result;
       }
     }
+  }
+
+  function CreateClassHint(name, type) {    
+    var _name = getClassName(name);
+    var _type = type;
+    var _description = getClassDescription(name);
+    var _displayName = _name.indexOf("\"") === 0 ? _name.substring(1, _name.length) : _name;
+
+    return {
+      text: _name,
+      render: function(parentElement, data, current) {
+        var result = attributeHintTemplate.replace(/{{name}}/, _displayName);
+        result = result.replace(/{{type}}/, _type);
+        result = result.replace(/{{description}}/, _description != null ? _description : "");
+        parentElement.innerHTML  = result;
+      }
+    }
+  }
+
+  function getClassName(complexClassName) {
+    var indexOfSpace = complexClassName.indexOf(" ");
+    if (indexOfSpace === -1) {
+      return complexClassName;
+    }
+
+    var className = complexClassName.substring(0, indexOfSpace);
+    return className;
+  }
+
+  function getClassDescription(complexClassName) {
+   var indexOfSpace = complexClassName.indexOf(" ");
+    if (indexOfSpace === -1) {
+      return null;
+    }
+
+    var description = complexClassName.substring(indexOfSpace+1, complexClassName.length);
+    return description; 
   }
 
   CodeMirror.registerHelper("hint", "carbonxml", getHints);
