@@ -15,7 +15,8 @@ license that can be found in the LICENSE file.
 <script src="codemirror/addon/fold/foldcode.js"></script>
 <script src="codemirror/addon/fold/foldgutter.js"></script>
 <script src="codemirror/addon/fold/brace-fold.js"></script>
-<script src="codemirror/addon/fold/xml-fold.js"></script>
+<!-- not used in favor of tangere/addon/tangere-xml-fold.js -->
+<!-- <script src="codemirror/addon/fold/xml-fold.js"></script> -->
 <script src="codemirror/addon/fold/markdown-fold.js"></script>
 <script src="codemirror/addon/fold/comment-fold.js"></script>
 <script src="codemirror/addon/search/searchcursor.js"></script>
@@ -84,6 +85,11 @@ license that can be found in the LICENSE file.
   effectively, this disables autocomplete for mode json
  -->
 <script src="tangere/addon/json-hint.js"></script>
+<!-- 
+  brace folding for xml and carbonxml modes
+ -->
+<script src="tangere/addon/tangere-xml-fold.js"></script>
+
 
 
 <link rel="stylesheet" href="codemirror/lib/codemirror.css">
