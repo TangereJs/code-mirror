@@ -178,11 +178,16 @@ Polymer({
     }, 100);
   },
   refresh: function() {
-    if (this._isReady) {
-      this._mirrorInstance.refresh();
-      // *ij* fix for  maxlines not applied correctly in at-doc-viewer
-      this.maxLinesChanged(this.maxLines, undefined);
-    }
+    if (!this._isReady) return; 
+    this._mirrorInstance.refresh();
+    
+    // if fullscreen is already on return
+    // this is to fix a bug in dashboard designer, element setings tab and setting browser to be fullscreen and codemirror to be fullscreen
+    var fullScreenOn = this._mirrorInstance.getOption("fullScreen");
+    if (fullScreenOn) return;
+
+    // *ij* fix for  maxlines not applied correctly in at-doc-viewer
+    this.maxLinesChanged(this.maxLines, undefined);    
   },
   valueChanged: function() {
     if (!this._isReady || this._isInternalUpdate) {
