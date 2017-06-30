@@ -180,7 +180,31 @@
 "action-link",
 "icon-inline",
 "placeholder",
-"placeholder-text"
+"placeholder-text",
+"black",
+"white",
+"background-black",
+"background-white",
+"error",
+"info",
+"warning",
+"success",
+"text-primiary",
+"text-secondary",
+"text-disabled",
+"text-divider",
+"divider",
+"font-small",
+"font-bold",
+"font-bolder",
+"font-regular",
+"font-light",
+"font-extralight",
+"font-underline",
+"font-underline",
+"font-italic",
+"primiary",
+"secondary"
 
   ];
 
