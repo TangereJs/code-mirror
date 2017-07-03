@@ -189,7 +189,7 @@
 "info",
 "warning",
 "success",
-"text-primiary",
+"text-primary",
 "text-secondary",
 "text-disabled",
 "text-divider",
@@ -203,7 +203,7 @@
 "font-underline",
 "font-underline",
 "font-italic",
-"primiary",
+"primary",
 "secondary"
 
   ];
