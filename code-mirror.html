@@ -143,7 +143,7 @@ Polymer({
       }
       var text = changeEvent.text.toString();
       var isTest = /[\s:_a-z0-9]/gi.test(text);
-      console.log(`isTest ${isTest}`);
+
       if (!isTest) return;
 
       // *ij* colon character removed from close characters so that now icons can be suggested correctly
