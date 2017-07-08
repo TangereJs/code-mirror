@@ -203,6 +203,7 @@
 "font-underline",
 "font-underline",
 "font-italic",
+"font-uppercase",
 "primary",
 "secondary"
 
