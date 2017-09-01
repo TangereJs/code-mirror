@@ -197,9 +197,8 @@ Polymer({
     if (!this._isReady || this._isInternalUpdate) {
       return;
     }
-    var cursor = this._mirrorInstance.getCursor();
+
     this._mirrorInstance.setValue(this.value);
-    this._mirrorInstance.setCursor(cursor);
     this._mirrorInstance.refresh();
     this._fireValueChangedEvent(this.value);
   },
