@@ -94,7 +94,8 @@ Polymer({
      */
     readonly: {
       type: Boolean,
-      value: false
+      value: false,
+      observer: '_readonlyChanged'
     }
   },
   _isReady: false,
@@ -118,7 +119,7 @@ Polymer({
       lineNumbers: !this.noLineNumbers,
       foldGutter: true,
       gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-      readonly: this.readonly,
+      readOnly: this.readonly,
       extraKeys: {
         "F11": function(cm) {
           var codeMirrorScroll = Polymer.dom(self.root).querySelector('.CodeMirror-scroll');
@@ -263,6 +264,12 @@ Polymer({
     }
     this.maxLinesChanged(this.maxLines);
   },
+
+  _readonlyChanged: function(newValue, oldValue) {
+    if (!this._isReady) return;
+    this._mirrorInstance.setOption('readOnly', newValue);
+  },
+
   _getFocusableElement: function() {
     if (this._isReady) {
       return this._mirrorInstance.getInputField();
