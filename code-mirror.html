@@ -83,6 +83,18 @@ Polymer({
     changeOnKeypress: {
       type: Boolean,
       value: false
+    },
+
+    /**
+     * when true, text content is not editable
+     * 
+     * @property readonly
+     * @type Boolean
+     * @default false
+     */
+    readonly: {
+      type: Boolean,
+      value: false
     }
   },
   _isReady: false,
@@ -106,7 +118,7 @@ Polymer({
       lineNumbers: !this.noLineNumbers,
       foldGutter: true,
       gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-      //        viewportMargin: Infinity
+      readonly: this.readonly,
       extraKeys: {
         "F11": function(cm) {
           var codeMirrorScroll = Polymer.dom(self.root).querySelector('.CodeMirror-scroll');
