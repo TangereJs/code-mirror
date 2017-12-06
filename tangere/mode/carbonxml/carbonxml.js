@@ -378,8 +378,8 @@ CodeMirror.defineMode("carbonxml", function(editorConf, config_) {
     blockCommentStart: "<!--",
     blockCommentEnd: "-->",
 
-    configuration: config.htmlMode ? "html" : "carbonxml",
-    helperType: config.htmlMode ? "html" : "carbonxml",
+    configuration: config.htmlMode ? "carbonhtml" : "carbonxml",
+    helperType: config.htmlMode ? "carbonhtml" : "carbonxml",
 
     skipAttribute: function(state) {
       if (state.state == attrValueState)
@@ -390,8 +390,5 @@ CodeMirror.defineMode("carbonxml", function(editorConf, config_) {
 
 CodeMirror.defineMIME("text/carbonxml", "carbonxml");
 CodeMirror.defineMIME("application/carbonxml", "carbonxml");
-// debugger;
-if (!CodeMirror.mimeModes.hasOwnProperty("text/html"))
-  CodeMirror.defineMIME("text/html", {name: "carbonxml", htmlMode: true});
 
 });

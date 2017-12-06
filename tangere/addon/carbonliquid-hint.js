@@ -192,4 +192,5 @@
     return liquidHintFn(editor, liquidKeywords, getTokenFn, options);
   };
   CodeMirror.registerHelper("hint", "carbonliquid", liquidHint);
+  CodeMirror.registerHelper("hint", "liquid", liquidHint);
 });

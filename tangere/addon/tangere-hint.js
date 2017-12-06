@@ -59,9 +59,12 @@
   for (var tag in data) if (data.hasOwnProperty(tag) && data[tag] != s)
     populate(data[tag]);
 
-
-  Object.keys(data).forEach(function(key, index){ 
-    CodeMirror.htmlSchema[key] = data[key];
+  // inject tangere css class names into default html tags 
+  Object.keys(CodeMirror.htmlSchema).forEach(function(key, index){ 
+    // clone default tag data so that css class names are not shared with htmlmixed mode
+    var clone = JSON.parse(JSON.stringify(CodeMirror.htmlSchema[key]));
+    data[key] = clone;
+    data[key].attrs.class = CodeMirror.tangereHint.classes;
   });
 
   function tangereHint(cm, options) {
@@ -115,9 +118,9 @@
   if (CodeMirror.helpers.hint.hasOwnProperty('html')) {
     existingHtmlHintFn = CodeMirror.helpers.hint.html;
 
-    CodeMirror.registerHelper("hint", "html", combinedHtmlAndTangereHint);
+    CodeMirror.registerHelper("hint", "carbonhtml", combinedHtmlAndTangereHint);
   } else {
-    CodeMirror.registerHelper("hint", "html", tangereHint);  
+    CodeMirror.registerHelper("hint", "carbonhtml", tangereHint);
   }
   
 });
