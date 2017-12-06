@@ -65,21 +65,14 @@
       // get the left part
       var propertyName = lineParts[0];
 
-      // TODO(ij) do not suggest values for padding if padding already typed
-      if (lineParts.length === 2 && lineParts[1] !== "") {
-        // if user has typed a value filter available suggested values
-        // if there are no suggested filtered values, return empty
-
+      // we have enormous data structure bellow that holds pairs of propertyName -> suggested values
+      if (propertyValuesHints.hasOwnProperty(propertyName)) {
+        // we push the suggested values for current property to resutls
+        result = result.concat(propertyValuesHints[propertyName].values);
       } else {
-        // we have enormous data structure bellow that holds pairs of propertyName -> suggested values
-        if (propertyValuesHints.hasOwnProperty(propertyName)) {
-          // we push the suggested values for current property to resutls
-          result = result.concat(propertyValuesHints[propertyName].values);
-        } else {
-          // as fallback we keep the old way
-          add(spec.valueKeywords);
-          add(spec.colorKeywords);
-        }
+        // as fallback we keep the old way
+        add(spec.valueKeywords);
+        add(spec.colorKeywords);
       }
 
     } else if (st == "media" || st == "media_parens") {
