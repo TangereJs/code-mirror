@@ -19,13 +19,15 @@
     audio: {
       attrs: {
         src: null
-      }
+      },
+      children: []
     },
     break: {
       attrs: {
         strength: [ "none", "x-weak", "weak", "medium", "strong", "x-strong" ],
         time: null
-      }
+      },
+      children: []
     },
     p: {
       attrs: {},
@@ -39,12 +41,14 @@
       attrs: {
         "interpret-as": [ "characters", "spell-out", "orginal", "digits", "fraction", "unit", "date", "time", "telephone", "address", "interjection", "expletive" ],
         format: [ "mdy", "dmy", "ymd", "md", "dm", "ym", "my", "d", "m", "y" ]
-      }
+      },
+      children: []
     },
     sub: {
       attrs: {
         alias: {}
-      }
+      },
+      children: []
     }
   };
 
