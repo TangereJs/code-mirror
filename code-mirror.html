@@ -155,7 +155,7 @@ Polymer({
         return;
       }
       var text = changeEvent.text.toString();
-      var isTest = /[\s:_a-z0-9]/gi.test(text);
+      var isTest = /[\s=":_a-z0-9]/gi.test(text);
 
       if (!isTest) return;
 
