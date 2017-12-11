@@ -54,7 +54,7 @@
     }
   }
 
-  CodeMirror.defineMode("ssmlliquid", function (config, parserConfig) {
+  CodeMirror.defineMode("liquid-ssml", function (config, parserConfig) {
     var htmlMode = CodeMirror.getMode(config, {
       name: "ssml",
       htmlMode: true,
@@ -210,5 +210,5 @@
     };
   }, "ssml", "carbonliquid");
 
-  CodeMirror.defineMIME("text/ssmlliquid", "ssmlliquid");
+  CodeMirror.defineMIME("text/liquid-ssml", "liquid-ssml");
 });
