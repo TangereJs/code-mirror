@@ -82,20 +82,32 @@
 
     if (!tag && !inner.state.tagName || tagType) {
       if (tagName)
-        prefix = token.string;
+        prefix = token.string;      
       replaceToken = tagType;
       var cx = inner.state.context, curTag = cx && tags[cx.tagName];
       var childList = cx ? curTag && curTag.children : tags["!top"];
-      if (childList && tagType != "close") {
+      if (childList && tagType != "close" && token.string[token.string.length-1] === "<") {
         for (var i = 0; i < childList.length; ++i) if (!prefix || childList[i].lastIndexOf(prefix, 0) == 0)
-          result.push("<" + childList[i]);
-      } else if (tagType != "close") {
+          result.push(childList[i]);
+          // result.push("<" + childList[i]);
+      } else if (tagType && tagType != "close") {
         for (var name in tags)
-          if (tags.hasOwnProperty(name) && name != "!top" && name != "!attrs" && (!prefix || name.lastIndexOf(prefix, 0) == 0))
+          if (tags.hasOwnProperty(name) && name != "!top" && name != "!attrs" && (!prefix || name.lastIndexOf(prefix, 0) == 0)) {
             result.push("<" + name);
+          }
       }
-      if (cx && (!prefix || tagType == "close" && cx.tagName.lastIndexOf(prefix, 0) == 0))
+      if (cx && (tagType == "close" || (prefix && cx.tagName.lastIndexOf(prefix, 0) == 0))) {
         result.push("</" + cx.tagName + ">");
+      }
+
+    } else if (tag && !inner.state.tagName || tagType) {
+      // this else branch here handles the case when we are inside a parent tag and user just pressed < character
+      var tagName1 = inner.state.context.tagName;
+      var tag1 = ssmlTags[tagName1];
+      var childList1 = tag1.children;
+      for (var i = 0; i < childList1.length; ++i)
+        result.push(childList1[i]);
+
     } else {
       // Attribute completion
       var curTag = tags[inner.state.tagName], attrs = curTag && curTag.attrs;
@@ -110,11 +122,15 @@
         attrs = set;
       }
       if (token.type == "string" || token.string == "=") { // A value
+        var existingClasses = [];
         var before = cm.getRange(Pos(cur.line, Math.max(0, cur.ch - 60)),
                                  Pos(cur.line, token.type == "string" ? token.start : token.end));
         var atName = before.match(/([^\s\u00a0=<>\"\']+)=$/), atValues;
         if (!atName || !attrs.hasOwnProperty(atName[1]) || !(atValues = attrs[atName[1]])) return;
         if (typeof atValues == 'function') atValues = atValues.call(this, cm); // Functions can be used to supply values for autocomplete widget
+
+        if (typeof atValues == 'string') atValues = [ atValues ];
+
         if (token.type == "string") {
           prefix = token.string;
           var n = 0;
@@ -130,15 +146,38 @@
           }
           replaceToken = true;
         }
-        for (var i = 0; i < atValues.length; ++i) if (!prefix || atValues[i].lastIndexOf(prefix, 0) == 0)
-          result.push(quote + atValues[i] + quote);
+        
+        // when attribute name is not class and has enum values
+        // just add those values to result
+        var tokenString = token.string.trim();
+        var quoteIndex = tokenString.indexOf("\"");
+        var filterText = "";
+        if (quoteIndex > -1) {
+          filterText = tokenString.slice(quoteIndex+1, tokenString.length);
+        }
+
+        var startsWidthRegex = new RegExp("^"+filterText);
+
+        var attributeValues = atValues;
+        if (atValues.value !== undefined && isArray(atValues.value)) {
+          attributeValues = atValues.value;
+        }
+
+        for (var i = 0; i < attributeValues.length; ++i) {
+          if (startsWidthRegex.test(attributeValues[i])) {
+            result.push("\"" + attributeValues[i] + "\"");
+          }
+        }
+      
       } else { // An attribute name
         if (token.type == "attribute") {
           prefix = token.string;
           replaceToken = true;
         }
-        for (var attr in attrs) if (attrs.hasOwnProperty(attr) && (!prefix || attr.lastIndexOf(prefix, 0) == 0))
+        for (var attr in attrs) if (attrs.hasOwnProperty(attr) && (!prefix || attr.lastIndexOf(prefix, 0) == 0)) {
+          var attrDef = attrs[attr];
           result.push(attr);
+        }
       }
     }
     return {
