@@ -20,7 +20,7 @@
     lang: 1
   };
 
-  function hasOpenBrace(cm, cur) {
+  function hasToken(cm, cur, tokenStr) {
     var line = cm.getLine(cur.line);
     var tCur = {
       line: cur.line,
@@ -29,7 +29,7 @@
     var hasOpenBrace = false;
     while(tCur.ch < line.length && !hasOpenBrace) {
       var tToken = cm.getTokenAt(tCur);
-      hasOpenBrace = tToken.string === "{";
+      hasOpenBrace = tToken.string === tokenStr;
       tCur.ch = tToken.end + 1;
     }
     return hasOpenBrace;
@@ -49,9 +49,11 @@
       };
 
     // do not show hints after open brace on the same line; but on the next line
-    if (hasOpenBrace(cm, cur)) return {list: [],
+    if (hasToken(cm, cur, "{") || hasToken(cm, cur, ";")) {
+        return {list: [],
             from: CodeMirror.Pos(cur.line, token.start),
             to: CodeMirror.Pos(cur.line, token.end)};
+    }
 
     var start = token.start,
       end = cur.ch,
