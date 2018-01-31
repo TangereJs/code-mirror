@@ -100,7 +100,7 @@
         result.push("</" + cx.tagName + ">");
       }
 
-    } else if (tag && !inner.state.tagName || tagType) {
+    } else if ((tag && !inner.state.tagName || tagType) && inner.state.context) {
       // this else branch here handles the case when we are inside a parent tag and user just pressed < character
       var tagName1 = inner.state.context.tagName;
       var tag1 = ssmlTags[tagName1];
