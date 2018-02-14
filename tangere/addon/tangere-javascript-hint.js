@@ -35,7 +35,7 @@
       ch: 1
     };
     var hasOpenBrace = false;
-    while(tCur.ch < line.length && !hasOpenBrace) {
+    while(tCur.ch <= line.length && !hasOpenBrace) {
       var tToken = cm.getTokenAt(tCur);
       hasOpenBrace = tToken.string === tokenStr;
       tCur.ch = tToken.end + 1;
