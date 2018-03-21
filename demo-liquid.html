@@ -41,17 +41,17 @@
       var codeMirror = document.getElementById('codeMirror');
       //      console.log(codeMirror);
 
-      var liquidMixedStr = '<div>\n' + 
-        '    {% for item in items %}\n' + 
+      var liquidMixedStr = '<div>\n' +
+        '    {% for item in items %}\n' +
         '</div>\n' +
-        '<style>\n' + 
+        '<style>\n' +
         '  body {\n' +
-        '    background: red;\n' + 
-        '  }\n' + 
+        '    background: red;\n' +
+        '  }\n' +
         '</style>\n'
         ;
 
-        var liquidMixedStr2 = 
+        var liquidMixedStr2 =
           '<div>asd fadfa sdf asdf asdf</div>\n'+
           '<div>asdfioasdf </div>\n'+
           '{% for item in items %}\n'+
@@ -71,19 +71,19 @@
           '{% comment %}\n' +
           '{% for item in items %}\n'+
           '\t<li>{{ item|capitalize }}</li>\n'+
-          '{% endfor %}\n' + 
+          '{% endfor %}\n' +
           '{% endcomment %}\n';
 
       var pureHtmlStr = '<div class></div>';
       var imgHtmlStr = '<img/>';
-      var pureLiquid = 
+      var pureLiquid =
         '{% comment %}\n' +
-        '<div></div>\n' + 
-        '{% for item in items %}\n' + 
+        '<div></div>\n' +
+        '{% for item in items %}\n' +
         '{{ ivan|capfirst }}\n' +
         '{% endcomment %}\n';
-      
-      var pureLiquid2 =         
+
+      var pureLiquid2 =
         '    <span>{{ ivan|capfirst }}</span>\n';
       var pureLiquid3 ='{{ ivan }}\n';
 
@@ -92,7 +92,7 @@
         '{# this is sparta! #}';
 
 
-        var atElementsHtml = 
+        var atElementsHtml =
         '<at-carbon-message type ></at-carbon-message>\n';
 
       codeMirror.value = atElementsHtml;
