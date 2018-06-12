@@ -56,7 +56,8 @@
                    "time", "timesince", "timeuntil", "title", "truncatechars",
                    "truncatechars_html", "truncatewords", "truncatewords_html",
                    "unordered_list", "upper", "urlencode", "urlize",
-                   "urlizetrunc", "wordcount", "wordwrap", "yesno"];
+                   "urlizetrunc", "wordcount", "wordwrap", "yesno", 
+                   "component_url", "t"];
 
     liquidFilters = liquidFilters.sort(function(key1, key2) {
     if (key1 === key2) {
