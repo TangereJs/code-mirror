@@ -1,24 +1,32 @@
 <link rel="import" href="../tangere/tangere.html">
 <link rel="import" href="codemirror-import.html">
 
+<link rel="import" href="tangere/styles/codemirror.html">
+<link rel="import" href="tangere/styles/carbon.html">
+<link rel="import" href="tangere/styles/fullscreen.html">
+<link rel="import" href="tangere/styles/foldgutter.html">
+
 <dom-module id="code-mirror">
   <template>
-    <style>
-    .CodeMirror {
-      border: 1px solid #bbb;
-    }
+    <style include="fullscreen"></style>
+    <style include="foldgutter"></style>
+    <style include="codemirror-theme"></style>
+    <style include="carbon-theme">
+      .CodeMirror {
+        border: 1px solid #bbb;
+      }
 
-    .CodeMirror {
-      height: auto;
-    }
+      .CodeMirror {
+        height: auto;
+      }
 
-    .CodeMirror-scroll {
-      max-height: 300px;      
-    }
+      .CodeMirror-scroll {
+        max-height: 300px;      
+      }
 
-    .CodeMirror-fullscreen {
-      z-index: 1009;
-    }
+      .CodeMirror-fullscreen {
+        z-index: 1009;
+      }
     </style>
   </template>
 </dom-module>

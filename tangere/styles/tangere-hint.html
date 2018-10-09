@@ -1,0 +1,94 @@
+<dom-module id="tangere-hint">
+  <template>
+    <style>
+      /* this is the div element */
+      .CodeMirror-hint .liquid-keyword {}
+
+      /* this is the span that holds keyword name  */
+      .CodeMirror-hint .liquid-keyword .liquid-keyword-name {}
+
+      /* this is the span that holds keyword description  */
+      .CodeMirror-hint .liquid-keyword .liquid-keyword-description {
+        display: block;
+        box-sizing: border-box;
+        float: right;
+        width: 100px;
+        text-align: right;
+      }
+
+      /* this is the div element */
+      .CodeMirror-hint.CodeMirror-hint-active .liquid-keyword {}
+
+      /* this is the span that holds keyword name  */
+      .CodeMirror-hint.CodeMirror-hint-active .liquid-keyword .liquid-keyword-name {}
+
+      /* this is the span that holds keyword description  */
+      .CodeMirror-hint.CodeMirror-hint-active .liquid-keyword .liquid-keyword-description {}
+
+      /* this is the div element */
+      .CodeMirror-hint .liquid-filter {}
+
+      /* this is the span that holds filter name  */
+      .CodeMirror-hint .liquid-filter .liquid-filter-name {}
+
+      /* this is the span that holds filter description  */
+      .CodeMirror-hint .liquid-filter .liquid-filter-description {
+        display: block;
+        box-sizing: border-box;
+        float: right;
+        width: 100px;
+        text-align: right;
+      }
+
+      /* this is the div element */
+      .CodeMirror-hint.CodeMirror-hint-active .liquid-filter {}
+
+      /* this is the span that holds filter name  */
+      .CodeMirror-hint.CodeMirror-hint-active .liquid-filter .liquid-filter-name {}
+
+      /* this is the span that holds filter description  */
+      .CodeMirror-hint.CodeMirror-hint-active .liquid-filter .liquid-filter-description {}
+
+
+      /**
+        * CSS classes for tangere at elements names and attributes
+        **/
+      .CodeMirror-hint .tangere-attribute-hint {
+        width: 250px;
+      }
+
+      .CodeMirror-hint .tangere-attribute-hint .attribute-name {
+        font-weight: 600;
+        float: left;
+        width: 100px;
+      }
+
+      .CodeMirror-hint .tangere-attribute-hint .attribute-type {
+        float: right;
+        width: 150px;
+        text-align: right;
+      }
+
+      .clear-float {
+        clear: both;
+      }
+
+      .CodeMirror-hint .tangere-attribute-hint .attribute-description {
+        display: none;
+        white-space: pre-wrap;
+      }
+
+      /* when active */
+
+      .CodeMirror-hint.CodeMirror-hint-active .tangere-attribute-hint {}
+
+      .CodeMirror-hint.CodeMirror-hint-active .tangere-attribute-hint .attribute-name {}
+
+      .CodeMirror-hint.CodeMirror-hint-active .tangere-attribute-hint .attribute-type {}
+
+      .CodeMirror-hint.CodeMirror-hint-active .tangere-attribute-hint .attribute-description {
+        display: block;
+      }
+    </style>
+  </template>
+</dom-module>
